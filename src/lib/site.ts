@@ -2,7 +2,8 @@ export const site = {
   name: "Ortoative",
   // TODO: trocar pelo domínio real quando for registrado
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ortoative.com.br",
-  tagline: "Clínica e fabricante de alinhadores invisíveis em Anápolis há mais de 26 anos.",
+  tagline:
+    "Clínica e fabricante de alinhadores invisíveis em Anápolis há mais de 26 anos.",
   // Número da clínica — formato 55DDDNÚMERO (sem espaços/traços)
   whatsapp: "556284983400",
   telefoneExibicao: "+55 62 8498-3400",

@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { enviarLead, formatarTelefone, telefoneValido } from "@/lib/lead";
-import {
-  etapaInicial,
-  montarMensagem,
-  montarSequencia,
-  type TrilhaId,
-} from "@/lib/quiz";
+import { etapaInicial, montarMensagem, montarSequencia, type TrilhaId } from "@/lib/quiz";
 import { whatsappLink } from "@/lib/site";
 
 /**
@@ -49,9 +44,8 @@ export default function Quiz() {
       <div className="rounded-xl border bg-card p-8 text-center shadow-sm">
         <h2 className="text-2xl">Tudo pronto, {nome.split(" ")[0] || "obrigado"}!</h2>
         <p className="mt-3 text-muted-foreground">
-          Nossa secretária entrará em contato com você dentro dos próximos 10 minutos.
-          Se já quiser dar mais informações, pode entrar em contato clicando no botão
-          abaixo:
+          Nossa secretária entrará em contato com você dentro dos próximos 10 minutos. Se
+          já quiser dar mais informações, pode entrar em contato clicando no botão abaixo:
         </p>
         <a
           href={whatsappLink(montarMensagem(nome, trilha, respostas))}

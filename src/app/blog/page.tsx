@@ -24,7 +24,10 @@ export default function BlogPage() {
       </p>
       <div className="mt-10 space-y-4">
         {pautaInicial.map((titulo) => (
-          <div key={titulo} className="rounded-xl border border-border/70 p-6 transition-colors hover:bg-realce">
+          <div
+            key={titulo}
+            className="rounded-xl border border-border/70 p-6 transition-colors hover:bg-realce"
+          >
             <h2 className="text-lg">{titulo}</h2>
             <p className="mt-1 text-base font-semibold text-brand-green-text">Em breve</p>
           </div>

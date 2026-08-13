@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 /** desacelera no fim — a contagem "assenta" no valor em vez de estancar */
 function suavizar(t: number) {
-  return 1 - Math.pow(1 - t, 3);
+  return 1 - (1 - t) ** 3;
 }
 
 /**

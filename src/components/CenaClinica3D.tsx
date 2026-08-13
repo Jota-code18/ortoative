@@ -289,10 +289,7 @@ export default function CenaClinica3D({
           /* A cortina fecha no fim do passeio, como no bundle. O piso de 0.5
              mantém o topo claro desde o início — sem ele o título ficaria
              sobre o azul do céu, com contraste ruim. */
-          materialCortina.uniforms.uOpacity.value = Math.max(
-            0.5,
-            suave(0.78, 1, nt)
-          );
+          materialCortina.uniforms.uOpacity.value = Math.max(0.5, suave(0.78, 1, nt));
 
           renderer.render(cena, camera);
         };
@@ -388,7 +385,10 @@ export default function CenaClinica3D({
               /* sem transição aqui: o valor já chega suave, quadro a quadro,
                  do laço de animação — amortecer de novo criaria atraso */
               style={
-                { "--progresso": progressoFilme, transition: "none" } as React.CSSProperties
+                {
+                  "--progresso": progressoFilme,
+                  transition: "none",
+                } as React.CSSProperties
               }
             />
           </div>

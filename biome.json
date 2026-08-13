@@ -1,0 +1,131 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": [
+      "src/**",
+      "e2e/**",
+      "testes/**",
+      "scripts/**",
+      "*.ts",
+      "*.mts",
+      "*.mjs",
+      "*.json",
+      "!src/lib/lqip.json",
+      "!src/app/globals.css",
+      "!**/node_modules",
+      "!.next"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 90,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "trailingCommas": "es5",
+      "semicolons": "always"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noConsole": { "level": "warn", "options": { "allow": ["warn", "error"] } }
+      },
+      "complexity": { "noExcessiveCognitiveComplexity": "warn" },
+      "style": {
+        "useConst": "error",
+        "noNonNullAssertion": "error",
+        "useTemplate": "error"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      }
+    }
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "overrides": [
+    {
+      "includes": ["scripts/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["e2e/**", "testes/**"],
+      "linter": {
+        "rules": {
+          "complexity": { "noExcessiveCognitiveComplexity": "off" },
+          "suspicious": { "useIterableCallbackReturn": "off" }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/DadosEstruturados.tsx"],
+      "linter": {
+        "rules": {
+          "security": { "noDangerouslySetInnerHtml": "off" }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/ModelViewer.tsx"],
+      "linter": {
+        "rules": {
+          "performance": { "noImgElement": "off" },
+          "a11y": { "useAriaPropsSupportedByRole": "off" }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/WhatsAppButton.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": { "useAnchorContent": "off" }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/CenaClinica3D.tsx", "src/components/QuizInline.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": { "noExcessiveCognitiveComplexity": "off" }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/CarrosselTratamentos.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": { "useSemanticElements": "off" },
+          "correctness": { "useExhaustiveDependencies": "off" }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/EsqueletoDePagina.tsx",
+        "src/components/Quiz.tsx",
+        "src/components/QuizInline.tsx",
+        "src/components/Header.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": { "noArrayIndexKey": "off" },
+          "correctness": { "useExhaustiveDependencies": "off" }
+        }
+      }
+    }
+  ]
+}
