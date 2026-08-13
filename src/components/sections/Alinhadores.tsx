@@ -54,7 +54,7 @@ const pecas = [
 
 export default function Alinhadores() {
   return (
-    <section className="py-8 md:py-10">
+    <section className="py-5 md:py-10">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid items-center gap-6 md:grid-cols-[1fr_auto] md:gap-10">
           <Reveal>
@@ -89,7 +89,7 @@ export default function Alinhadores() {
         </div>
       </Reveal>
 
-      <div className="mx-auto mt-8 max-w-5xl px-4">
+      <div className="mx-auto mt-5 max-w-5xl px-4 md:mt-8">
         <Reveal>
           <ComparativoTratamentos />
         </Reveal>

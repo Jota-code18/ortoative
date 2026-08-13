@@ -10,7 +10,7 @@ import { previa } from "@/lib/lqip";
  */
 export default function ProcedimentosGrid() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+    <section className="mx-auto max-w-6xl px-4 py-5 md:py-10">
       <Reveal>
         <h2 className="text-3xl md:text-4xl">Conheça os demais procedimentos</h2>
       </Reveal>

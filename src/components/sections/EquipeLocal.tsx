@@ -13,7 +13,7 @@ import { previa } from "@/lib/lqip";
  */
 export default function EquipeLocal() {
   return (
-    <section id="local" className="scroll-mt-20 py-8 md:py-10">
+    <section id="local" className="scroll-mt-20 py-5 md:py-10">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
           <h2 className="text-3xl md:text-4xl">
@@ -22,7 +22,7 @@ export default function EquipeLocal() {
         </Reveal>
 
         {unidades.map((u, i) => (
-          <div key={u.slug} className={i === 0 ? "mt-8" : "mt-16"}>
+          <div key={u.slug} className={i === 0 ? "mt-6 md:mt-8" : "mt-10 md:mt-16"}>
             <Reveal>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <h3 className="text-2xl text-primary md:text-3xl">Unidade {u.nome}</h3>
@@ -71,7 +71,7 @@ export default function EquipeLocal() {
           </div>
         ))}
 
-        <div className="mt-16">
+        <div className="mt-10 md:mt-16">
           <Reveal>
             <h2 className="text-3xl md:text-4xl">Equipe Ortoative</h2>
           </Reveal>
@@ -80,7 +80,7 @@ export default function EquipeLocal() {
             <EquipeRows />
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-6 text-center md:mt-8">
             <Link
               href="/equipe"
               className="inline-block rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground hover:bg-brand-blue"

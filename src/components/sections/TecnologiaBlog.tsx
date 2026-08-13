@@ -11,7 +11,7 @@ import { previa } from "@/lib/lqip";
 
 export default function TecnologiaBlog() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+    <section className="mx-auto max-w-6xl px-4 py-5 md:py-10">
       <Reveal>
         <p className="mb-2 text-sm font-bold uppercase tracking-wide text-brand-green-text">
           Tecnologia & Fábrica
@@ -37,7 +37,7 @@ export default function TecnologiaBlog() {
         </div>
       </Reveal>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-2">
+      <div className="mt-5 grid gap-5 sm:grid-cols-2 md:mt-8">
         {fabrica.map((e, i) => (
           <Reveal key={e.src} delay={i * 80}>
             <article className="h-full overflow-hidden rounded-2xl border border-border/70 transition-colors hover:bg-realce">
@@ -63,7 +63,7 @@ export default function TecnologiaBlog() {
       </div>
 
       <Reveal delay={120}>
-        <div className="mt-8 flex flex-wrap gap-4">
+        <div className="mt-5 flex flex-wrap gap-4 md:mt-8">
           <Link
             href="/tecnologia"
             className="rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground hover:bg-brand-blue"

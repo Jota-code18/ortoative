@@ -9,7 +9,7 @@ import { previa } from "@/lib/lqip";
  */
 export default function ParaDentistas() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+    <section className="mx-auto max-w-6xl px-4 py-5 md:py-10">
       <div className="grid items-center gap-8 lg:grid-cols-2">
         <Reveal from="left" className="order-2 lg:order-1">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
