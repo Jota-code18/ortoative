@@ -1,3 +1,6 @@
+import os from "node:os";
+import path from "node:path";
+
 /**
  * Teste de mutação.
  *
@@ -36,5 +39,12 @@ export default {
 
   thresholds: { high: 90, low: 80, break: 80 },
   timeoutMS: 60_000,
-  tempDirName: "node_modules/.stryker-tmp",
+
+  /* A caixa de areia fica fora do projeto, no temp do sistema.
+     O Stryker cria dentro dela um link simbólico para node_modules; se isso
+     morar sob a raiz do projeto e a limpeza falhar (acontece no Windows, com
+     arquivo travado), o Turbopack entra em laço infinito no build seguinte e
+     derruba tudo com um panic que não diz de onde veio. Já aconteceu aqui. */
+  tempDirName: path.join(os.tmpdir(), "stryker-ortoative"),
+  cleanTempDir: true,
 };
