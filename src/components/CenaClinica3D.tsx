@@ -1,8 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 // só tipos: não entra no bundle, o three em si é carregado sob demanda
 import type * as TRES from "three";
+import Skeleton from "@/components/Skeleton";
+import { unidades } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Passeio 3D pelo espaço da Ortoative.
@@ -19,6 +23,28 @@ import type * as TRES from "three";
  */
 
 const DURACAO = 10; // segundos de passeio
+
+/**
+ * Fachada da unidade, para segurar o lugar quando o WebGL falha ou o download
+ * do modelo não completa. Sai da mesma fonte que alimenta a seção — assim o
+ * caminho não se perde quando o formato do acervo muda.
+ */
+const fachadaDaUnidade = (nome: string) =>
+  unidades.find((u) => u.nome === nome)?.fachada ?? unidades[0].fachada;
+
+/**
+ * Só um passeio pode manter contexto WebGL vivo por vez.
+ *
+ * Antes os dois ficavam ligados: o observador que dispara a cena se
+ * desconectava depois de iniciar, e a limpeza só rodava no desmonte — que
+ * nunca acontece nessa página. Somando as duas cenas, o celular estourava a
+ * memória e o sistema matava a aba. O sintoma era a página recarregar sozinha
+ * ao chegar em Goianésia.
+ *
+ * O registro guarda a função de soltar a cena atual. Quem inicia, solta a
+ * anterior.
+ */
+let soltarCenaAtiva: (() => void) | null = null;
 
 const suavizar = (u: number) => -(Math.cos(Math.PI * u) - 1) / 2;
 const suave = (a: number, b: number, x: number) => {
@@ -55,6 +81,9 @@ export default function CenaClinica3D({
     let visivel = true;
     let limpar = () => {};
 
+    /** Esta instância está com uma cena montada? */
+    const cenaViva = () => soltarCenaAtiva === limpar && soltarCenaAtiva !== null;
+
     const iniciar = async () => {
       setEstado("carregando");
       try {
@@ -70,10 +99,14 @@ export default function CenaClinica3D({
           ]);
         if (morto) return;
 
+        /* No celular a tela é pequena e a GPU é modesta: antialias por
+           hardware custa caro e o ganho some no DPR alto. */
+        const noCelular = window.matchMedia("(max-width: 768px)").matches;
+
         const renderer = new THREE.WebGLRenderer({
           canvas,
-          antialias: true,
-          powerPreference: "high-performance",
+          antialias: !noCelular,
+          powerPreference: noCelular ? "default" : "high-performance",
         });
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1;
@@ -102,7 +135,10 @@ export default function CenaClinica3D({
         const sol = new THREE.DirectionalLight(0xfff3e2, 1.9);
         sol.position.set(4.5, 6, 3.5);
         sol.castShadow = true;
-        sol.shadow.mapSize.set(2048, 2048);
+        /* 1024 no celular: o mapa de sombra é textura como qualquer outra, e
+           2048² são 16 MB de VRAM que no aparelho do paciente fazem falta. */
+        const ladoSombra = noCelular ? 1024 : 2048;
+        sol.shadow.mapSize.set(ladoSombra, ladoSombra);
         sol.shadow.bias = -0.0006;
         sol.shadow.normalBias = 0.02;
         cena.add(sol);
@@ -277,10 +313,7 @@ export default function CenaClinica3D({
           /* A cortina fecha no fim do passeio, como no bundle. O piso de 0.5
              mantém o topo claro desde o início — sem ele o título ficaria
              sobre o azul do céu, com contraste ruim. */
-          materialCortina.uniforms.uOpacity.value = Math.max(
-            0.5,
-            suave(0.78, 1, nt)
-          );
+          materialCortina.uniforms.uOpacity.value = Math.max(0.5, suave(0.78, 1, nt));
 
           renderer.render(cena, camera);
         };
@@ -293,30 +326,97 @@ export default function CenaClinica3D({
           ro.disconnect();
           io.disconnect();
           bloco.removeEventListener("pointermove", aoMover);
+
+          /* `renderer.dispose()` sozinho libera o estado interno do renderer e
+             mais nada: geometria, material e textura continuam na memória de
+             vídeo. Em cena com textura de 2048 isso é dezenas de MB que ficam
+             pendurados até a aba morrer. */
+          cena.traverse((obj) => {
+            const malha = obj as TRES.Mesh;
+            malha.geometry?.dispose?.();
+            const materiais = Array.isArray(malha.material)
+              ? malha.material
+              : malha.material
+                ? [malha.material]
+                : [];
+            for (const material of materiais) {
+              // as texturas ficam em campos do material (map, normalMap, ...)
+              for (const valor of Object.values(material)) {
+                const textura = valor as TRES.Texture | undefined;
+                if (textura?.isTexture) textura.dispose();
+              }
+              material.dispose();
+            }
+          });
+          cena.clear();
+
           renderer.dispose();
           draco.dispose();
+          /* Devolve o contexto ao navegador na hora. Sem isso ele fica na fila
+             do coletor de lixo, e o limite de contextos simultâneos do celular
+             é baixo. */
+          renderer.forceContextLoss();
+
+          if (soltarCenaAtiva === limpar) soltarCenaAtiva = null;
+          limpar = () => {};
+          if (!morto) {
+            // volta ao esqueleto: o canvas ficou sem contexto
+            setEstado("espera");
+            setProgressoCarga(0);
+            setProgressoFilme(0);
+            setTerminou(false);
+          }
         };
+
+        /* A partir daqui esta é a cena viva. Solta a anterior, se houver. */
+        soltarCenaAtiva?.();
+        soltarCenaAtiva = limpar;
       } catch (e) {
         console.error("cena 3D:", e);
         if (!morto) setEstado("erro");
       }
     };
 
-    // só busca three + modelo quando o bloco se aproxima da tela
-    const gatilho = new IntersectionObserver(
+    /* Entrada: busca three e o modelo quando o bloco se aproxima da tela.
+       O observador NÃO se desconecta depois de disparar — a cena pode ter sido
+       solta enquanto o visitante estava longe, e precisa voltar quando ele
+       rolar de novo até aqui. */
+    let carregando = false;
+    const gatilhoEntrada = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
-          gatilho.disconnect();
-          iniciar();
+        if (e.isIntersecting && !carregando && !cenaViva()) {
+          carregando = true;
+          iniciar().finally(() => {
+            carregando = false;
+          });
         }
       },
-      { rootMargin: "300px" }
+      /* Margem curta de propósito. Com margem larga os dois passeios ficam
+         "entrando" ao mesmo tempo, e o registro de cena única vira pingue-
+         pongue: um solta o outro, que reentra e solta de volta. Entre os dois
+         blocos há a fachada e três fotos do interior — quase mil pixels no
+         celular —, então 150px nunca alcança os dois de uma vez. */
+      { rootMargin: "150px", threshold: 0.01 }
     );
-    gatilho.observe(bloco);
+
+    /* Saída: solta a cena quando o bloco está a mais de uma tela de distância.
+       É o que garante que rolar a página inteira não vá acumulando contexto. */
+    const gatilhoSaida = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) limpar();
+      },
+      /* Larga do outro lado: só solta quando o bloco está mesmo longe, para
+         quem rola devagar não ver a cena sumir e voltar. */
+      { rootMargin: "120%" }
+    );
+
+    gatilhoEntrada.observe(bloco);
+    gatilhoSaida.observe(bloco);
 
     return () => {
       morto = true;
-      gatilho.disconnect();
+      gatilhoEntrada.disconnect();
+      gatilhoSaida.disconnect();
       limpar();
     };
   }, [modelo]);
@@ -334,39 +434,53 @@ export default function CenaClinica3D({
       >
         <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
 
-        {/* Estado de carga — os modelos têm 10 e 13 MB */}
+        {/* Estado de carga — os modelos têm 10 e 13 MB, então isso fica na
+            tela por vários segundos em rede de celular. O esqueleto ocupa o
+            quadro inteiro para o bloco não parecer um buraco na página. */}
         {estado !== "pronto" && estado !== "erro" && (
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 p-6 md:p-10">
-            <div className="h-[3px] w-[min(320px,60%)] overflow-hidden rounded-full bg-black/10">
-              <div
-                className="h-full bg-brand-green transition-[width] duration-300"
-                style={{ width: `${progressoCarga}%` }}
-              />
+          <>
+            <Skeleton arredondado="" className="absolute inset-0" />
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 p-6 md:p-10">
+              <div className="progresso-trilho h-[3px] w-[min(320px,60%)]">
+                <div
+                  className="progresso-barra"
+                  style={{ "--progresso": progressoCarga / 100 } as React.CSSProperties}
+                />
+              </div>
+              <p className="text-sm tracking-[0.2em] text-muted-foreground">
+                CARREGANDO {unidade.toUpperCase()} — {progressoCarga}%
+              </p>
             </div>
-            <p className="text-sm tracking-[0.2em] text-muted-foreground">
-              CARREGANDO {unidade.toUpperCase()} — {progressoCarga}%
-            </p>
-          </div>
+          </>
         )}
 
         {/* Sem WebGL ou com falha no download: a fachada real segura o lugar */}
         {estado === "erro" && (
           <div className="absolute inset-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`/images/${unidade === "Goianésia" ? "goianesia" : "clinica"}/fachada.jpg`}
+            <Image
+              src={fachadaDaUnidade(unidade)}
               alt={`Fachada da Ortoative — ${unidade}`}
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 1152px"
+              className="object-cover"
+              {...previa(fachadaDaUnidade(unidade))}
             />
           </div>
         )}
 
         {/* Linha de progresso do passeio */}
         {estado === "pronto" && (
-          <div className="absolute inset-x-0 bottom-0 h-[3px] bg-black/10">
+          <div className="progresso-trilho absolute inset-x-0 bottom-0 h-[3px] rounded-none">
             <div
-              className="h-full bg-brand-green"
-              style={{ width: `${(progressoFilme * 100).toFixed(1)}%` }}
+              className="progresso-barra rounded-none"
+              /* sem transição aqui: o valor já chega suave, quadro a quadro,
+                 do laço de animação — amortecer de novo criaria atraso */
+              style={
+                {
+                  "--progresso": progressoFilme,
+                  transition: "none",
+                } as React.CSSProperties
+              }
             />
           </div>
         )}

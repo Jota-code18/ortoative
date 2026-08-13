@@ -16,7 +16,7 @@ export type TrilhaId =
   | "protese"
   | "cirurgia";
 
-export type Opcao = { label: string; trilha?: TrilhaId };
+type Opcao = { label: string; trilha?: TrilhaId };
 
 export type Etapa = {
   id: string;
@@ -25,6 +25,10 @@ export type Etapa = {
 };
 
 /** Porta de entrada — a escolha aqui decide o restante do questionário */
+/* Stryker disable all: daqui até o fim das tabelas é conteúdo, não lógica.
+   Mutar o texto de uma pergunta gera mutante que nenhum teste razoável mata —
+   e isso afundaria o placar sem dizer nada sobre a qualidade da suíte. O que
+   interessa medir são as funções abaixo, que decidem o caminho do paciente. */
 export const etapaInicial: Etapa = {
   id: "queixa",
   titulo: "O que mais te incomoda hoje?",
@@ -213,17 +217,13 @@ export const trilhas: Record<TrilhaId, Etapa[]> = {
     {
       id: "cir_sintoma",
       titulo: "Sente dor ou inchaço agora?",
-      opcoes: [
-        { label: "Sim, bastante" },
-        { label: "Um pouco" },
-        { label: "Não" },
-      ],
+      opcoes: [{ label: "Sim, bastante" }, { label: "Um pouco" }, { label: "Não" }],
     },
   ],
 };
 
 /** Perguntas finais, iguais para todos */
-export const etapasComuns: Etapa[] = [
+const etapasComuns: Etapa[] = [
   {
     id: "unidade",
     titulo: "Qual unidade é melhor pra você?",
@@ -243,6 +243,8 @@ const especialidade: Record<TrilhaId, string> = {
 };
 
 /** Trilha completa a partir da resposta inicial */
+/* Stryker restore all */
+
 export function montarSequencia(trilha: TrilhaId | null): Etapa[] {
   return [etapaInicial, ...(trilha ? trilhas[trilha] : []), ...etapasComuns];
 }

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ModelViewer from "@/components/ModelViewer";
+import { previa } from "@/lib/lqip";
 
 /**
  * Hero visual: fotos nas laterais dissolvendo em um azul difuso ao centro,
@@ -8,7 +9,10 @@ import ModelViewer from "@/components/ModelViewer";
  */
 export default function Hero() {
   return (
-    <section id="hero" className="relative h-[92vh] min-h-[560px] overflow-hidden bg-hero-dark">
+    <section
+      id="hero"
+      className="relative h-[92vh] min-h-[560px] overflow-hidden bg-hero-dark"
+    >
       {/* Foto esquerda — dissolve gradualmente em direção ao centro */}
       <div
         className="hero-curtain-left absolute inset-y-0 left-0 w-[48%]"
@@ -20,7 +24,7 @@ export default function Hero() {
         }}
       >
         <Image
-          src="/images/hero/esquerda-hero.jpg"
+          src="/images/hero/esquerda-hero.avif"
           alt="Paciente sorrindo"
           fill
           priority
@@ -29,6 +33,7 @@ export default function Hero() {
              necessário, por isso `sizes` bem acima da largura do bloco. */
           sizes="(max-width: 768px) 100vw, 75vw"
           className="hero-photo object-cover object-center"
+          {...previa("/images/hero/esquerda-hero.avif")}
         />
       </div>
 
@@ -43,13 +48,14 @@ export default function Hero() {
         }}
       >
         <Image
-          src="/images/hero/direita-equipe.jpg"
+          src="/images/hero/direita-equipe.avif"
           alt="Equipe Ortoative"
           fill
           priority
           quality={92}
           sizes="(max-width: 768px) 100vw, 75vw"
           className="hero-photo-right object-cover object-top"
+          {...previa("/images/hero/direita-equipe.avif")}
         />
       </div>
 

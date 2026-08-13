@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { procedimentosGrade } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: demais procedimentos — quadrados com imagem e nome.
@@ -9,7 +10,7 @@ import { procedimentosGrade } from "@/lib/data";
  */
 export default function ProcedimentosGrid() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+    <section className="mx-auto max-w-6xl px-4 py-5 md:py-10">
       <Reveal>
         <h2 className="text-3xl md:text-4xl">Conheça os demais procedimentos</h2>
       </Reveal>
@@ -27,6 +28,7 @@ export default function ProcedimentosGrid() {
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  {...previa(p.imagem)}
                 />
               </div>
               <div className="p-4">

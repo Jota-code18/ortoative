@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: Ortoative para outros dentistas — aulas do Dr. Rui, ensino,
@@ -8,16 +9,17 @@ import Reveal from "@/components/Reveal";
  */
 export default function ParaDentistas() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+    <section className="mx-auto max-w-6xl px-4 py-5 md:py-10">
       <div className="grid items-center gap-8 lg:grid-cols-2">
         <Reveal from="left" className="order-2 lg:order-1">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <Image
-              src="/images/dentistas/rui-apresentacao.jpg"
+              src="/images/dentistas/rui-apresentacao.avif"
               alt="Dr. Rui Cambauva analisando um escaneamento 3D no computador"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              {...previa("/images/dentistas/rui-apresentacao.avif")}
             />
           </div>
         </Reveal>

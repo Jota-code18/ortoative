@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito, Nunito_Sans } from "next/font/google";
 import DadosEstruturados from "@/components/DadosEstruturados";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -50,11 +50,14 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: TITULO,
     description: DESCRICAO,
+    /* JPEG de propósito, e no 1,91:1 que o cartão pede. O acervo do site é
+       AVIF, mas WhatsApp, Facebook e X não negociam formato ao buscar a
+       prévia: em AVIF o link aparece sem imagem. */
     images: [
       {
-        url: "/images/hero/esquerda-hero.jpg",
-        width: 1152,
-        height: 1440,
+        url: "/images/og/compartilhamento.jpg",
+        width: 1200,
+        height: 630,
         alt: "Paciente sorrindo — Ortoative",
       },
     ],
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: TITULO,
     description: DESCRICAO,
-    images: ["/images/hero/esquerda-hero.jpg"],
+    images: ["/images/og/compartilhamento.jpg"],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/images/marca/simbolo.png" },
@@ -74,9 +77,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${nunito.variable} ${nunitoSans.variable} font-sans antialiased`}
-      >
+      <body className={`${nunito.variable} ${nunitoSans.variable} font-sans antialiased`}>
         <DadosEstruturados />
         {/* Atalho para quem navega por teclado pular o menu */}
         <a

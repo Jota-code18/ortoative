@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import CarrosselTratamentos, {
-  type Tratamento,
-} from "@/components/CarrosselTratamentos";
+import CarrosselTratamentos, { type Tratamento } from "@/components/CarrosselTratamentos";
 import ComparativoTratamentos from "@/components/ComparativoTratamentos";
 import Reveal from "@/components/Reveal";
+import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: alinhadores e ortodontia fixa — faixa infinita alternando os dois
@@ -39,14 +38,14 @@ const pecas = [
   {
     /* arco solto, com o fundo recortado: gira devagar como se a câmera desse
        a volta nele */
-    src: "/images/alinhadores/alinhador-arco.png",
+    src: "/images/alinhadores/alinhador-arco.avif",
     alt: "Alinhador invisível Ortoative",
     largura: 466,
     altura: 267,
     girar: true,
   },
   {
-    src: "/images/alinhadores/aparelho-movel.png",
+    src: "/images/alinhadores/aparelho-movel.avif",
     alt: "Aparelho ortodôntico móvel",
     largura: 900,
     altura: 1228,
@@ -55,7 +54,7 @@ const pecas = [
 
 export default function Alinhadores() {
   return (
-    <section className="py-8 md:py-10">
+    <section className="py-5 md:py-10">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid items-center gap-6 md:grid-cols-[1fr_auto] md:gap-10">
           <Reveal>
@@ -64,20 +63,21 @@ export default function Alinhadores() {
               Fixa?
             </h2>
             <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
-              Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual
-              combina com seu caso, sua rotina e seu bolso.
+              Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual combina
+              com seu caso, sua rotina e seu bolso.
             </p>
           </Reveal>
 
           {/* o estojo já vem com os cantos arredondados no próprio arquivo */}
           <Reveal from="right" delay={120}>
             <Image
-              src="/images/alinhadores/estojo-aberto.webp"
+              src="/images/alinhadores/estojo-aberto.avif"
               alt="Estojo aberto com o par de alinhadores Ortoative"
               width={387}
               height={373}
               sizes="(max-width: 768px) 45vw, 224px"
               className="h-auto w-40 md:w-56"
+              {...previa("/images/alinhadores/estojo-aberto.avif")}
             />
           </Reveal>
         </div>
@@ -89,7 +89,7 @@ export default function Alinhadores() {
         </div>
       </Reveal>
 
-      <div className="mx-auto mt-8 max-w-5xl px-4">
+      <div className="mx-auto mt-5 max-w-5xl px-4 md:mt-8">
         <Reveal>
           <ComparativoTratamentos />
         </Reveal>

@@ -5,7 +5,7 @@ import Reveal from "@/components/Reveal";
 /** Mockup: procedimentos voltados para estética (lentes, facetas) */
 export default function Estetica() {
   return (
-    <section className="py-8 md:py-10">
+    <section className="py-5 md:py-10">
       <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 lg:grid-cols-2">
         <Reveal from="left">
           <p className="mb-2 text-sm font-bold uppercase tracking-wide text-brand-green-text">
@@ -27,7 +27,7 @@ export default function Estetica() {
         <Reveal from="right" delay={120}>
           <PhotoPlaceholder
             label="Foto: caso de estética (lentes/facetas)"
-            path="public/images/procedimentos/estetica-destaque.jpg"
+            path="public/images/procedimentos/estetica-destaque.avif"
             className="aspect-[4/3]"
           />
         </Reveal>

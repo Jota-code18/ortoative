@@ -22,8 +22,20 @@ type Payload = {
   respostas?: Record<string, string>;
 };
 
-const DESTINO = process.env.LEAD_EMAIL_TO;
-const REMETENTE = process.env.LEAD_EMAIL_FROM ?? "Site Ortoative <onboarding@resend.dev>";
+/**
+ * Lido dentro do handler, não no escopo do módulo.
+ *
+ * No escopo do módulo o valor congela na primeira avaliação — que em alguns
+ * modos de empacotamento acontece no build, antes de a variável existir. O
+ * sintoma seria o pior possível: a rota responde 200, o log não acusa nada, e
+ * o e-mail simplesmente não sai.
+ */
+const configuracaoDeEmail = () => ({
+  chave: process.env.RESEND_API_KEY,
+  destino: process.env.LEAD_EMAIL_TO,
+  remetente: process.env.LEAD_EMAIL_FROM ?? "Site Ortoative <onboarding@resend.dev>",
+  responderPara: process.env.LEAD_EMAIL_REPLY_TO,
+});
 
 export async function POST(request: Request) {
   let payload: Payload;
@@ -76,7 +88,9 @@ export async function POST(request: Request) {
       </p>
     </div>`;
 
-  if (!process.env.RESEND_API_KEY || !DESTINO) {
+  const { chave, destino, remetente, responderPara } = configuracaoDeEmail();
+
+  if (!chave || !destino) {
     console.warn("[lead] e-mail não configurado; lead recebido:", {
       nome,
       telefone,
@@ -87,13 +101,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const resend = new Resend(chave);
     const { error } = await resend.emails.send({
-      from: REMETENTE,
-      to: DESTINO.split(",").map((e) => e.trim()),
+      from: remetente,
+      to: destino.split(",").map((e) => e.trim()),
       subject: assunto,
       html,
-      replyTo: process.env.LEAD_EMAIL_REPLY_TO,
+      replyTo: responderPara,
     });
     if (error) throw new Error(error.message);
     return NextResponse.json({ ok: true, email: true });

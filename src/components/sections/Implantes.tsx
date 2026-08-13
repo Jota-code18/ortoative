@@ -9,19 +9,19 @@ import { whatsappLink } from "@/lib/site";
  */
 export default function Implantes() {
   return (
-    <section className="py-8 md:py-10">
+    <section className="py-5 md:py-10">
       <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 lg:grid-cols-2">
         <Reveal from="left">
           <h2 className="text-3xl md:text-4xl">
-            Implantes com quem tem{" "}
-            <span className="text-brand-green-text">26 anos</span> de experiência
+            Implantes com quem tem <span className="text-brand-green-text">26 anos</span>{" "}
+            de experiência
           </h2>
           <p className="mt-4 max-w-lg text-muted-foreground">
             Recupere a segurança para sorrir, mastigar e conversar. Avaliação completa,
             planejamento digital e acompanhamento próximo, do primeiro exame à
             cicatrização.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-5 flex flex-wrap gap-4 md:mt-8">
             <Link
               href="/procedimentos/implantes"
               className="rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-blue"

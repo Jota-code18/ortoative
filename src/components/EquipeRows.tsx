@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import { equipe, type Profissional } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Lista da equipe em linhas: foto à esquerda, dados à direita.
@@ -18,6 +19,7 @@ function Linha({ p }: { p: Profissional }) {
             fill
             sizes="(max-width: 768px) 92px, 150px"
             className="object-cover transition-transform duration-700 group-hover:scale-105"
+            {...previa(p.foto)}
           />
         </div>
       </Reveal>

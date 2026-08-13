@@ -32,7 +32,7 @@ export const equipe: Profissional[] = [
       "Clínicas em Anápolis e Goianésia – GO",
       "CEO da Ortoative Especialidades",
     ],
-    foto: "/images/equipe/rui.jpg",
+    foto: "/images/equipe/rui.avif",
   },
   {
     slug: "adriana-cambauva",
@@ -43,7 +43,7 @@ export const equipe: Profissional[] = [
     especializacoes: [
       "Especialização e mestrado em Ortodontia — Universidade São Leopoldo Mandic",
     ],
-    foto: "/images/equipe/adriana.jpg",
+    foto: "/images/equipe/adriana.avif",
   },
   {
     slug: "jessica-fonseca",
@@ -56,7 +56,7 @@ export const equipe: Profissional[] = [
     especializacoes: [
       "Especialista em Prótese Dentária — Instituto Lenza de Pós-Graduação, Goiânia-GO (2018–2020)",
     ],
-    foto: "/images/equipe/jessica.jpg",
+    foto: "/images/equipe/jessica.avif",
   },
   {
     slug: "isabella-barcelos",
@@ -70,7 +70,7 @@ export const equipe: Profissional[] = [
       "Especialista em Odontologia Hospitalar — Hospital Israelita Albert Einstein-SP (2019)",
       "Especialista em Prótese Dentária — UFG (2022–2024)",
     ],
-    foto: "/images/equipe/isabella.jpg",
+    foto: "/images/equipe/isabella.avif",
   },
   {
     slug: "priscilla-carvalho",
@@ -82,7 +82,7 @@ export const equipe: Profissional[] = [
       "Especialista em Periodontia",
       "Prótese dentária e implantossuportada",
     ],
-    foto: "/images/equipe/priscilla.jpg",
+    foto: "/images/equipe/priscilla.avif",
   },
 ];
 
@@ -113,11 +113,17 @@ export const unidades: Unidade[] = [
     cidade: "Anápolis",
     uf: "GO",
     cep: "75110-270",
-    fachada: "/images/clinica/fachada.jpg",
+    fachada: "/images/clinica/fachada.avif",
     interiores: [
-      { src: "/images/clinica/interior-01.jpg", alt: "Sala de espera da unidade de Anápolis" },
-      { src: "/images/clinica/interior-02.jpg", alt: "Recepção da unidade de Anápolis" },
-      { src: "/images/clinica/interior-03.jpg", alt: "Consultório da unidade de Anápolis" },
+      {
+        src: "/images/clinica/interior-01.avif",
+        alt: "Sala de espera da unidade de Anápolis",
+      },
+      { src: "/images/clinica/interior-02.avif", alt: "Recepção da unidade de Anápolis" },
+      {
+        src: "/images/clinica/interior-03.avif",
+        alt: "Consultório da unidade de Anápolis",
+      },
     ],
     modelo3d: "/models/clinica.glb",
   },
@@ -129,11 +135,20 @@ export const unidades: Unidade[] = [
     bairro: "Setor Sul",
     cidade: "Goianésia",
     uf: "GO",
-    fachada: "/images/goianesia/fachada.jpg",
+    fachada: "/images/goianesia/fachada.avif",
     interiores: [
-      { src: "/images/goianesia/interior-01.jpg", alt: "Recepção da unidade de Goianésia" },
-      { src: "/images/goianesia/interior-02.jpg", alt: "Consultórios da unidade de Goianésia" },
-      { src: "/images/goianesia/interior-03.jpg", alt: "Consultório da unidade de Goianésia" },
+      {
+        src: "/images/goianesia/interior-01.avif",
+        alt: "Recepção da unidade de Goianésia",
+      },
+      {
+        src: "/images/goianesia/interior-02.avif",
+        alt: "Consultórios da unidade de Goianésia",
+      },
+      {
+        src: "/images/goianesia/interior-03.avif",
+        alt: "Consultório da unidade de Goianésia",
+      },
     ],
     modelo3d: "/models/clinicagoianesia.glb",
   },
@@ -142,28 +157,28 @@ export const unidades: Unidade[] = [
 /** Etapas da fabricação própria, com as fotos reais do laboratório */
 export const fabrica = [
   {
-    src: "/images/fabrica/impressoras.jpg",
+    src: "/images/fabrica/impressoras.avif",
     alt: "Impressoras 3D do laboratório da Ortoative",
     titulo: "Impressão 3D própria",
     texto:
       "O parque de impressoras roda todos os dias produzindo os modelos de cada paciente. Nada sai daqui para ser feito por terceiros.",
   },
   {
-    src: "/images/fabrica/laboratorio.jpg",
+    src: "/images/fabrica/laboratorio.avif",
     alt: "Laboratório de produção dos alinhadores da Ortoative",
     titulo: "Laboratório próprio",
     texto:
       "A produção fica na mesma cidade em que você é atendido — o que encurta o prazo entre o planejamento e a entrega da primeira placa.",
   },
   {
-    src: "/images/fabrica/acabamento.jpg",
+    src: "/images/fabrica/acabamento.avif",
     alt: "Etapa de acabamento e polimento do alinhador",
     titulo: "Acabamento manual",
     texto:
       "Cada alinhador é recortado, polido e conferido à mão. É essa etapa que faz a borda não machucar a gengiva.",
   },
   {
-    src: "/images/fabrica/modelos.jpg",
+    src: "/images/fabrica/modelos.avif",
     alt: "Modelos das arcadas impressos em 3D, um para cada etapa do tratamento",
     titulo: "Um modelo por etapa",
     texto:
@@ -189,28 +204,28 @@ export const procedimentosGrade: Procedimento[] = [
     nome: "Prótese",
     resumo:
       "Repõe dentes perdidos com peças fixas ou removíveis, devolvendo mastigação, fala e aparência natural.",
-    imagem: "/images/procedimentos/protese.jpg",
+    imagem: "/images/procedimentos/protese.avif",
   },
   {
     slug: "canal",
     nome: "Canal",
     resumo:
       "Trata a parte interna do dente inflamada ou infeccionada. Acaba com a dor e preserva o dente em vez de extrair.",
-    imagem: "/images/procedimentos/canal.jpg",
+    imagem: "/images/procedimentos/canal.avif",
   },
   {
     slug: "gengivas",
     nome: "Tratamento de Gengivas",
     resumo:
       "Cuida da gengiva e do osso que sustentam os dentes. Sangramento, retração e mau hálito têm tratamento.",
-    imagem: "/images/procedimentos/gengivas.jpg",
+    imagem: "/images/procedimentos/gengivas.avif",
   },
   {
     slug: "cirurgias",
     nome: "Cirurgias",
     resumo:
       "Extração de sisos e outras cirurgias da boca, com planejamento por imagem e recuperação acompanhada de perto.",
-    imagem: "/images/procedimentos/cirurgias.jpg",
+    imagem: "/images/procedimentos/cirurgias.avif",
   },
 ];
 
@@ -231,7 +246,22 @@ export type Depoimento = {
 
 /** TODO: depoimentos reais (Instagram permitido) */
 export const depoimentos: Depoimento[] = [
-  { nome: "Paciente 1", idade: 24, procedimento: "Alinhadores", texto: "Depoimento real a inserir." },
-  { nome: "Paciente 2", idade: 58, procedimento: "Implantes", texto: "Depoimento real a inserir." },
-  { nome: "Paciente 3", idade: 31, procedimento: "Estética", texto: "Depoimento real a inserir." },
+  {
+    nome: "Paciente 1",
+    idade: 24,
+    procedimento: "Alinhadores",
+    texto: "Depoimento real a inserir.",
+  },
+  {
+    nome: "Paciente 2",
+    idade: 58,
+    procedimento: "Implantes",
+    texto: "Depoimento real a inserir.",
+  },
+  {
+    nome: "Paciente 3",
+    idade: 31,
+    procedimento: "Estética",
+    texto: "Depoimento real a inserir.",
+  },
 ];
