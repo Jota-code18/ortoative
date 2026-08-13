@@ -41,12 +41,23 @@ const COPIAS = 3;
 export default function CarrosselTratamentos({
   tratamentos,
   pecas,
+  aoTrocar,
 }: {
   tratamentos: Tratamento[];
   pecas: Peca[];
+  /** avisa quem está de fora qual tratamento está em foco */
+  aoTrocar?: (indice: number) => void;
 }) {
   const trilhoRef = useRef<HTMLDivElement>(null);
   const [ativo, setAtivo] = useState(0);
+  /* Em ref para o efeito não precisar do callback nas dependências — ele
+     recria todos os listeners e reposiciona a faixa se rodar de novo.
+     A sincronia vai num efeito próprio: escrever em ref durante a renderização
+     quebra a regra do compilador do React. */
+  const aoTrocarRef = useRef(aoTrocar);
+  useEffect(() => {
+    aoTrocarRef.current = aoTrocar;
+  }, [aoTrocar]);
   const total = tratamentos.length;
 
   /* Os controles são montados dentro do efeito: lá eles podem ler relógio e
@@ -101,7 +112,11 @@ export default function CarrosselTratamentos({
         quadro = requestAnimationFrame(() => {
           quadro = 0;
           const l = trilho.clientWidth;
-          if (l) setAtivo(Math.round(trilho.scrollLeft / l) % total);
+          if (l) {
+            const indice = Math.round(trilho.scrollLeft / l) % total;
+            setAtivo(indice);
+            aoTrocarRef.current?.(indice);
+          }
         });
       }
       clearTimeout(timerParada);
