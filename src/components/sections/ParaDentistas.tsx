@@ -13,7 +13,7 @@ export default function ParaDentistas() {
         <Reveal from="left" className="order-2 lg:order-1">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <Image
-              src="/images/dentistas/rui-apresentacao.jpg"
+              src="/images/dentistas/rui-apresentacao.avif"
               alt="Dr. Rui Cambauva analisando um escaneamento 3D no computador"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"

@@ -20,7 +20,7 @@ export default function Hero() {
         }}
       >
         <Image
-          src="/images/hero/esquerda-hero.jpg"
+          src="/images/hero/esquerda-hero.avif"
           alt="Paciente sorrindo"
           fill
           priority
@@ -43,7 +43,7 @@ export default function Hero() {
         }}
       >
         <Image
-          src="/images/hero/direita-equipe.jpg"
+          src="/images/hero/direita-equipe.avif"
           alt="Equipe Ortoative"
           fill
           priority

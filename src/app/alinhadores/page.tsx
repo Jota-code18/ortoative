@@ -56,12 +56,12 @@ export default function AlinhadoresPage() {
         <div className="mt-12 grid gap-4 md:grid-cols-2">
           <PhotoPlaceholder
             label="Foto: produção do alinhador na fábrica"
-            path="public/images/fabrica/producao-01.jpg"
+            path="public/images/fabrica/producao-01.avif"
             className="aspect-[4/3]"
           />
           <PhotoPlaceholder
             label="Foto: alinhador em uso / detalhe"
-            path="public/images/alinhadores/detalhe-01.jpg"
+            path="public/images/alinhadores/detalhe-01.avif"
             className="aspect-[4/3]"
           />
         </div>

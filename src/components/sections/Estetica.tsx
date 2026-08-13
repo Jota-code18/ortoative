@@ -27,7 +27,7 @@ export default function Estetica() {
         <Reveal from="right" delay={120}>
           <PhotoPlaceholder
             label="Foto: caso de estética (lentes/facetas)"
-            path="public/images/procedimentos/estetica-destaque.jpg"
+            path="public/images/procedimentos/estetica-destaque.avif"
             className="aspect-[4/3]"
           />
         </Reveal>
