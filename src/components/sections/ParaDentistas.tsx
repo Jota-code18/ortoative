@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: Ortoative para outros dentistas — aulas do Dr. Rui, ensino,
@@ -18,6 +19,7 @@ export default function ParaDentistas() {
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              {...previa("/images/dentistas/rui-apresentacao.avif")}
             />
           </div>
         </Reveal>

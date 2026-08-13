@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { procedimentosGrade } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: demais procedimentos — quadrados com imagem e nome.
@@ -27,6 +28,7 @@ export default function ProcedimentosGrid() {
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  {...previa(p.imagem)}
                 />
               </div>
               <div className="p-4">

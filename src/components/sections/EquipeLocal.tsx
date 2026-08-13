@@ -4,6 +4,7 @@ import CenaClinica3D from "@/components/CenaClinica3D";
 import EquipeRows from "@/components/EquipeRows";
 import Reveal from "@/components/Reveal";
 import { enderecoDe, unidades } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Unidades + equipe.
@@ -42,6 +43,7 @@ export default function EquipeLocal() {
                   fill
                   sizes="(max-width: 768px) 100vw, 1152px"
                   className="object-cover"
+                  {...previa(u.fachada)}
                 />
               </div>
             </Reveal>
@@ -56,6 +58,7 @@ export default function EquipeLocal() {
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover"
+                      {...previa(foto.src)}
                     />
                   </div>
                 </Reveal>
