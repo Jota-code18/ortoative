@@ -17,7 +17,7 @@ type Peca = {
   alt: string;
   largura: number;
   altura: number;
-  /** peça solta, que gira devagar como se a câmera desse a volta nela */
+  /** peça solta: fica parada, sem o balanço das demais */
   girar?: boolean;
 };
 
@@ -233,7 +233,7 @@ export default function CarrosselTratamentos({
               {/* Caixa quadrada: o brilho fica igual nas duas peças. Antes ele
                   herdava a altura da imagem — e como o aparelho é bem mais alto
                   que o estojo, saía maior e cortado. */}
-              <div className="relative aspect-square w-[34%] shrink-0 md:w-[30%]">
+              <div className="relative aspect-square w-[46%] shrink-0 md:w-[30%]">
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 rounded-full"
@@ -242,35 +242,20 @@ export default function CarrosselTratamentos({
                       "radial-gradient(circle, color-mix(in oklch, var(--brand-green) 22%, transparent) 0%, color-mix(in oklch, var(--primary) 12%, transparent) 45%, transparent 72%)",
                   }}
                 />
-                {/* Duas camadas para a peça que gira: a de fora inclina (a
-                    "câmera" subindo e descendo) e a de dentro dá a volta. Numa
-                    camada só, a segunda transformação sobrescreveria a matriz
-                    da primeira e o giro perderia a inclinação. */}
-                {peca.girar ? (
-                  <div className="peca-orbita pointer-events-none absolute inset-0">
-                    <Image
-                      src={peca.src}
-                      alt={peca.alt}
-                      width={peca.largura}
-                      height={peca.altura}
-                      sizes="(max-width: 768px) 34vw, 30vw"
-                      /* o arco é largo e baixo: preso a 86% da caixa quadrada
-                         ele ficaria pequeno demais, então ocupa a largura toda */
-                      className="peca-girando absolute inset-0 m-auto max-h-[86%] w-auto max-w-full object-contain"
-                      {...previa(peca.src)}
-                    />
-                  </div>
-                ) : (
-                  <Image
-                    src={peca.src}
-                    alt={peca.alt}
-                    width={peca.largura}
-                    height={peca.altura}
-                    sizes="(max-width: 768px) 34vw, 30vw"
-                    className="peca-flutuante absolute inset-0 m-auto max-h-[86%] w-auto max-w-[86%] object-contain"
-                    {...previa(peca.src)}
-                  />
-                )}
+                <Image
+                  src={peca.src}
+                  alt={peca.alt}
+                  width={peca.largura}
+                  height={peca.altura}
+                  sizes="(max-width: 768px) 46vw, 30vw"
+                  /* O arco é largo e baixo: preso a 86% da caixa quadrada
+                     ficaria pequeno demais, então usa a largura toda. O
+                     aparelho é alto e cabe no limite comum. */
+                  className={`absolute inset-0 m-auto max-h-[86%] w-auto object-contain ${
+                    peca.girar ? "max-w-full" : "peca-flutuante max-w-[86%]"
+                  }`}
+                  {...previa(peca.src)}
+                />
               </div>
             </div>
           ))}

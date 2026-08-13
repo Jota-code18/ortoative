@@ -36,8 +36,9 @@ const tratamentos: Tratamento[] = [
 
 const pecas = [
   {
-    /* arco solto, com o fundo recortado: gira devagar como se a câmera desse
-       a volta nele */
+    /* Arco solto, com o fundo recortado. Fica estático a pedido do cliente:
+       girar um PNG só simula volume, e sem refração acompanhando a rotação o
+       efeito entrega que é uma imagem plana. */
     src: "/images/alinhadores/alinhador-arco.avif",
     alt: "Alinhador invisível Ortoative",
     largura: 466,
