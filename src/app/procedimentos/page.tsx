@@ -15,25 +15,25 @@ const destaques = [
     slug: "alinhadores",
     nome: "Alinhadores Ortoative",
     href: "/alinhadores",
-    imagem: "/images/procedimentos/alinhadores.jpg",
+    imagem: "/images/procedimentos/alinhadores.avif",
   },
   {
     slug: "ortodontia-fixa",
     nome: "Ortodontia Fixa",
     href: "/procedimentos/ortodontia-fixa",
-    imagem: "/images/procedimentos/ortodontia-fixa.jpg",
+    imagem: "/images/procedimentos/ortodontia-fixa.avif",
   },
   {
     slug: "implantes",
     nome: "Implantes",
     href: "/procedimentos/implantes",
-    imagem: "/images/procedimentos/implantes.jpg",
+    imagem: "/images/procedimentos/implantes.avif",
   },
   {
     slug: "estetica",
     nome: "Estética (lentes e facetas)",
     href: "/procedimentos/estetica",
-    imagem: "/images/procedimentos/estetica.jpg",
+    imagem: "/images/procedimentos/estetica.avif",
   },
 ];
 

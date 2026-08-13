@@ -39,14 +39,14 @@ const pecas = [
   {
     /* arco solto, com o fundo recortado: gira devagar como se a câmera desse
        a volta nele */
-    src: "/images/alinhadores/alinhador-arco.png",
+    src: "/images/alinhadores/alinhador-arco.avif",
     alt: "Alinhador invisível Ortoative",
     largura: 466,
     altura: 267,
     girar: true,
   },
   {
-    src: "/images/alinhadores/aparelho-movel.png",
+    src: "/images/alinhadores/aparelho-movel.avif",
     alt: "Aparelho ortodôntico móvel",
     largura: 900,
     altura: 1228,
@@ -72,7 +72,7 @@ export default function Alinhadores() {
           {/* o estojo já vem com os cantos arredondados no próprio arquivo */}
           <Reveal from="right" delay={120}>
             <Image
-              src="/images/alinhadores/estojo-aberto.webp"
+              src="/images/alinhadores/estojo-aberto.avif"
               alt="Estojo aberto com o par de alinhadores Ortoative"
               width={387}
               height={373}

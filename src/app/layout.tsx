@@ -50,11 +50,14 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: TITULO,
     description: DESCRICAO,
+    /* JPEG de propósito, e no 1,91:1 que o cartão pede. O acervo do site é
+       AVIF, mas WhatsApp, Facebook e X não negociam formato ao buscar a
+       prévia: em AVIF o link aparece sem imagem. */
     images: [
       {
-        url: "/images/hero/esquerda-hero.jpg",
-        width: 1152,
-        height: 1440,
+        url: "/images/og/compartilhamento.jpg",
+        width: 1200,
+        height: 630,
         alt: "Paciente sorrindo — Ortoative",
       },
     ],
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: TITULO,
     description: DESCRICAO,
-    images: ["/images/hero/esquerda-hero.jpg"],
+    images: ["/images/og/compartilhamento.jpg"],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/images/marca/simbolo.png" },

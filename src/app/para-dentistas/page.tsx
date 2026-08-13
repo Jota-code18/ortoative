@@ -31,7 +31,7 @@ export default function ParaDentistasPage() {
         </div>
         <PhotoPlaceholder
           label="Foto: Dr. Rui — aulas / livros"
-          path="public/images/dentistas/rui-apresentacao.jpg"
+          path="public/images/dentistas/rui-apresentacao.avif"
           className="aspect-[4/3]"
         />
       </div>
