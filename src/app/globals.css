@@ -380,61 +380,12 @@ p.hero-line > span {
 
 /* Peça solta girando devagar: a câmera dá a volta e sobe/desce, como se o
    alinhador estivesse suspenso sendo examinado. */
-/* Giro contínuo do arco, no lugar do vaivém anterior.
-   A referência do cliente é uma sequência de vídeo do alinhador dando uma
-   volta inteira. Com um PNG recortado não dá para ter refração nem reflexo
-   acompanhando o giro, mas dá para ter a volta completa: `rotateY` de 0 a
-   360 em passo linear, sem ida e volta.
+/* O arco do alinhador fica estático a pedido do cliente. O giro de 360° saiu:
+   sobre um PNG plano a rotação simula volume mas não traz refração nem
+   reflexo acompanhando o movimento, e é justamente essa falta que entrega o
+   truque. A referência do concorrente usa vídeo, não CSS — a decisão de
+   caminho está na issue #20. */
 
-   A inclinação corre em ciclo próprio, de duração diferente (ver
-   `peca-inclinar`): as duas fora de fase evitam a leitura de carrossel, em que
-   a peça repete exatamente a mesma pose a cada volta. */
-@keyframes peca-girar {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(360deg);
-  }
-}
-
-/* Câmera subindo e descendo em torno da peça. Fica no elemento pai para
-   compor com o giro sem que um sobrescreva a matriz do outro. */
-@keyframes peca-inclinar {
-  0% {
-    transform: perspective(1100px) rotateX(14deg) translateY(-6px);
-  }
-  50% {
-    transform: perspective(1100px) rotateX(-12deg) translateY(6px);
-  }
-  100% {
-    transform: perspective(1100px) rotateX(14deg) translateY(-6px);
-  }
-}
-.peca-girando {
-  /* linear: rotação constante é a única leitura honesta de volta completa —
-     com easing a peça "para" nas pontas e o giro vira vaivém de novo */
-  animation: peca-girar 14s linear infinite;
-  transform-style: preserve-3d;
-  backface-visibility: visible;
-}
-/* o invólucro carrega a inclinação; 9s contra 14s do giro mantém as duas
-   fora de fase, então a pose nunca se repete exatamente */
-.peca-orbita {
-  animation: peca-inclinar 9s ease-in-out infinite;
-  transform-style: preserve-3d;
-}
-@media (prefers-reduced-motion: reduce) {
-  .peca-orbita {
-    animation: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .peca-flutuante,
-  .peca-girando {
-    animation: none;
-  }
-}
 /* o realce do item central é calculado em JS; aqui só o amortecimento */
 .item-faixa {
   transition:
