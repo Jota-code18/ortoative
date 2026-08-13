@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { whatsappLink } from "@/lib/site";
 
 /**
@@ -51,7 +51,10 @@ const linhas: Linha[] = [
     icone: (
       <Icone>
         <path {...traco} d="M6 3v7a2 2 0 0 0 4 0V3M8 10v11" />
-        <path {...traco} d="M17 3c-1.4 1.6-2 3.4-2 5.4 0 1.6.7 2.6 2 2.6h1V3h-1ZM17 11v10" />
+        <path
+          {...traco}
+          d="M17 3c-1.4 1.6-2 3.4-2 5.4 0 1.6.7 2.6 2 2.6h1V3h-1ZM17 11v10"
+        />
       </Icone>
     ),
     alinhador: "Remove na hora da refeição e come de tudo",
@@ -237,7 +240,8 @@ export default function ComparativoTratamentos() {
                 <span
                   className="block rounded-lg px-3 py-2 text-sm font-medium text-brand-green-text max-md:px-2 md:text-base"
                   style={{
-                    background: "color-mix(in oklch, var(--brand-green) 12%, transparent)",
+                    background:
+                      "color-mix(in oklch, var(--brand-green) 12%, transparent)",
                   }}
                 >
                   {melhorPara.alinhador}

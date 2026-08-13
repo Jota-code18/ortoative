@@ -6,8 +6,8 @@ import {
   montarMensagem,
   montarSequencia,
   respostasDetalhadas,
-  trilhas,
   type TrilhaId,
+  trilhas,
 } from "@/lib/quiz";
 
 const TODAS = Object.keys(trilhas) as TrilhaId[];

@@ -2,7 +2,6 @@ import EquipeRows from "@/components/EquipeRows";
 import Reveal from "@/components/Reveal";
 import { metadataDaPagina } from "@/lib/seo";
 
-
 export const metadata = metadataDaPagina({
   titulo: "Equipe",
   descricao:
@@ -16,8 +15,8 @@ export default function EquipePage() {
       <Reveal>
         <h1 className="text-4xl md:text-5xl">Equipe Ortoative</h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Profissionais com nome, rosto, CRO e formação — você sabe exatamente quem
-          cuida do seu sorriso.
+          Profissionais com nome, rosto, CRO e formação — você sabe exatamente quem cuida
+          do seu sorriso.
         </p>
       </Reveal>
 

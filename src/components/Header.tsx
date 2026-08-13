@@ -49,13 +49,13 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-start gap-5 px-4 md:gap-8">
-        <Link href="/" aria-label="Ortoative — Início" className="flex shrink-0 items-center">
+        <Link
+          href="/"
+          aria-label="Ortoative — Início"
+          className="flex shrink-0 items-center"
+        >
           <Image
-            src={
-              overHero
-                ? "/images/marca/simbolo-neg.png"
-                : "/images/marca/simbolo.png"
-            }
+            src={overHero ? "/images/marca/simbolo-neg.png" : "/images/marca/simbolo.png"}
             alt="Ortoative"
             width={40}
             height={41}

@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { enviarLead, formatarTelefone, telefoneValido } from "@/lib/lead";
-import {
-  etapaInicial,
-  montarMensagem,
-  montarSequencia,
-  type TrilhaId,
-} from "@/lib/quiz";
+import { etapaInicial, montarMensagem, montarSequencia, type TrilhaId } from "@/lib/quiz";
 import { whatsappLink } from "@/lib/site";
 
 /**
@@ -115,67 +110,64 @@ export default function QuizInline() {
                 <h2 className="text-center text-2xl md:text-3xl">
                   Como podemos te chamar?
                 </h2>
-              <form
-                className="mx-auto mt-5 w-full max-w-lg"
-                onSubmit={concluir}
-              >
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <input
-                    type="text"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    placeholder="Seu nome"
-                    required
-                    autoComplete="name"
-                    className="flex-1 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-white outline-none placeholder:text-white/65 focus:border-brand-green"
-                  />
-                  <input
-                    type="tel"
-                    value={telefone}
-                    onChange={(e) => setTelefone(formatarTelefone(e.target.value))}
-                    placeholder="Telefone com DDD"
-                    required
-                    inputMode="numeric"
-                    autoComplete="tel"
-                    className="flex-1 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-white outline-none placeholder:text-white/65 focus:border-brand-green"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={!nome.trim() || !telefoneValido(telefone) || enviando}
-                  className="tatil mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-green-btn px-6 py-3 font-bold text-white transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
-                >
-                  {enviando && (
-                    <svg
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                      className="girando h-5 w-5"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeOpacity="0.3"
-                        strokeWidth="3"
-                      />
-                      <path
-                        d="M12 3a9 9 0 0 1 9 9"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  )}
-                  {enviando ? "Enviando…" : "Concluir"}
-                </button>
-                {/* aria-live: quem usa leitor de tela também precisa saber que
+                <form className="mx-auto mt-5 w-full max-w-lg" onSubmit={concluir}>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <input
+                      type="text"
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
+                      placeholder="Seu nome"
+                      required
+                      autoComplete="name"
+                      className="flex-1 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-white outline-none placeholder:text-white/65 focus:border-brand-green"
+                    />
+                    <input
+                      type="tel"
+                      value={telefone}
+                      onChange={(e) => setTelefone(formatarTelefone(e.target.value))}
+                      placeholder="Telefone com DDD"
+                      required
+                      inputMode="numeric"
+                      autoComplete="tel"
+                      className="flex-1 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-white outline-none placeholder:text-white/65 focus:border-brand-green"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={!nome.trim() || !telefoneValido(telefone) || enviando}
+                    className="tatil mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-green-btn px-6 py-3 font-bold text-white transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+                  >
+                    {enviando && (
+                      <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        className="girando h-5 w-5"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeOpacity="0.3"
+                          strokeWidth="3"
+                        />
+                        <path
+                          d="M12 3a9 9 0 0 1 9 9"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
+                    {enviando ? "Enviando…" : "Concluir"}
+                  </button>
+                  {/* aria-live: quem usa leitor de tela também precisa saber que
                     o envio começou — a rodinha é decorativa */}
-                <p aria-live="polite" className="sr-only">
-                  {enviando ? "Enviando seus dados para a recepção." : ""}
-                </p>
+                  <p aria-live="polite" className="sr-only">
+                    {enviando ? "Enviando seus dados para a recepção." : ""}
+                  </p>
                 </form>
               </>
             ) : (

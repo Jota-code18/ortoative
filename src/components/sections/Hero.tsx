@@ -9,7 +9,10 @@ import { previa } from "@/lib/lqip";
  */
 export default function Hero() {
   return (
-    <section id="hero" className="relative h-[92vh] min-h-[560px] overflow-hidden bg-hero-dark">
+    <section
+      id="hero"
+      className="relative h-[92vh] min-h-[560px] overflow-hidden bg-hero-dark"
+    >
       {/* Foto esquerda — dissolve gradualmente em direção ao centro */}
       <div
         className="hero-curtain-left absolute inset-y-0 left-0 w-[48%]"

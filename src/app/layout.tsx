@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito, Nunito_Sans } from "next/font/google";
 import DadosEstruturados from "@/components/DadosEstruturados";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -77,9 +77,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${nunito.variable} ${nunitoSans.variable} font-sans antialiased`}
-      >
+      <body className={`${nunito.variable} ${nunitoSans.variable} font-sans antialiased`}>
         <DadosEstruturados />
         {/* Atalho para quem navega por teclado pular o menu */}
         <a

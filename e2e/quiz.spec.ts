@@ -101,7 +101,9 @@ test.describe("triagem", () => {
     const segunda = await page.locator("#avaliacao h2").innerText();
 
     await page.getByRole("button", { name: "← Voltar" }).click();
-    await expect(page.locator("#avaliacao h2")).toHaveText("O que mais te incomoda hoje?");
+    await expect(page.locator("#avaliacao h2")).toHaveText(
+      "O que mais te incomoda hoje?"
+    );
     expect(segunda).not.toBe("O que mais te incomoda hoje?");
   });
 });

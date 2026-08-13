@@ -115,9 +115,15 @@ export const unidades: Unidade[] = [
     cep: "75110-270",
     fachada: "/images/clinica/fachada.avif",
     interiores: [
-      { src: "/images/clinica/interior-01.avif", alt: "Sala de espera da unidade de Anápolis" },
+      {
+        src: "/images/clinica/interior-01.avif",
+        alt: "Sala de espera da unidade de Anápolis",
+      },
       { src: "/images/clinica/interior-02.avif", alt: "Recepção da unidade de Anápolis" },
-      { src: "/images/clinica/interior-03.avif", alt: "Consultório da unidade de Anápolis" },
+      {
+        src: "/images/clinica/interior-03.avif",
+        alt: "Consultório da unidade de Anápolis",
+      },
     ],
     modelo3d: "/models/clinica.glb",
   },
@@ -131,9 +137,18 @@ export const unidades: Unidade[] = [
     uf: "GO",
     fachada: "/images/goianesia/fachada.avif",
     interiores: [
-      { src: "/images/goianesia/interior-01.avif", alt: "Recepção da unidade de Goianésia" },
-      { src: "/images/goianesia/interior-02.avif", alt: "Consultórios da unidade de Goianésia" },
-      { src: "/images/goianesia/interior-03.avif", alt: "Consultório da unidade de Goianésia" },
+      {
+        src: "/images/goianesia/interior-01.avif",
+        alt: "Recepção da unidade de Goianésia",
+      },
+      {
+        src: "/images/goianesia/interior-02.avif",
+        alt: "Consultórios da unidade de Goianésia",
+      },
+      {
+        src: "/images/goianesia/interior-03.avif",
+        alt: "Consultório da unidade de Goianésia",
+      },
     ],
     modelo3d: "/models/clinicagoianesia.glb",
   },
@@ -231,7 +246,22 @@ export type Depoimento = {
 
 /** TODO: depoimentos reais (Instagram permitido) */
 export const depoimentos: Depoimento[] = [
-  { nome: "Paciente 1", idade: 24, procedimento: "Alinhadores", texto: "Depoimento real a inserir." },
-  { nome: "Paciente 2", idade: 58, procedimento: "Implantes", texto: "Depoimento real a inserir." },
-  { nome: "Paciente 3", idade: 31, procedimento: "Estética", texto: "Depoimento real a inserir." },
+  {
+    nome: "Paciente 1",
+    idade: 24,
+    procedimento: "Alinhadores",
+    texto: "Depoimento real a inserir.",
+  },
+  {
+    nome: "Paciente 2",
+    idade: 58,
+    procedimento: "Implantes",
+    texto: "Depoimento real a inserir.",
+  },
+  {
+    nome: "Paciente 3",
+    idade: 31,
+    procedimento: "Estética",
+    texto: "Depoimento real a inserir.",
+  },
 ];

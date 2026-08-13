@@ -24,15 +24,15 @@ export default function TecnologiaBlog() {
           <p>
             Quase toda clínica que oferece alinhador é revendedora: escaneia o paciente,
             envia o caso para uma indústria — muitas vezes em outro estado ou país — e
-            espera semanas pelas placas. A Ortoative faz o caminho inteiro dentro de
-            casa, do escaneamento à última troca.
+            espera semanas pelas placas. A Ortoative faz o caminho inteiro dentro de casa,
+            do escaneamento à última troca.
           </p>
           <p>
             Na prática isso muda três coisas para você. O prazo encurta, porque não há
             transporte nem fila de terceiro. A correção de rota é rápida: se um dente não
-            se moveu como o planejado, uma placa nova é produzida aqui mesmo, sem
-            reabrir pedido com fornecedor. E quem planeja o seu caso é quem fabrica, o
-            que elimina o telefone-sem-fio entre o consultório e a indústria.
+            se moveu como o planejado, uma placa nova é produzida aqui mesmo, sem reabrir
+            pedido com fornecedor. E quem planeja o seu caso é quem fabrica, o que elimina
+            o telefone-sem-fio entre o consultório e a indústria.
           </p>
         </div>
       </Reveal>

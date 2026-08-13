@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { fabrica } from "@/lib/data";
-import { metadataDaPagina } from "@/lib/seo";
 import { previa } from "@/lib/lqip";
+import { metadataDaPagina } from "@/lib/seo";
 
 export const metadata = metadataDaPagina({
   titulo: "Tecnologia & Fábrica",
@@ -26,10 +26,11 @@ export default function TecnologiaPage() {
           3D, um para cada etapa do tratamento.
         </p>
         <p>
-          Sobre esses modelos as placas são termoformadas, recortadas, polidas e conferidas
-          uma a uma. Como o laboratório é nosso, o prazo não depende de fornecedor: se um
-          dente não se mover como o planejado, a placa nova é produzida aqui mesmo, sem
-          reabrir pedido com terceiros. Quem planeja o seu caso é quem fabrica.
+          Sobre esses modelos as placas são termoformadas, recortadas, polidas e
+          conferidas uma a uma. Como o laboratório é nosso, o prazo não depende de
+          fornecedor: se um dente não se mover como o planejado, a placa nova é produzida
+          aqui mesmo, sem reabrir pedido com terceiros. Quem planeja o seu caso é quem
+          fabrica.
         </p>
       </div>
 

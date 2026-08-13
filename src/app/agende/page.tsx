@@ -8,7 +8,6 @@ export const metadata = metadataDaPagina({
   caminho: "/agende",
 });
 
-
 export default function AgendePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 pb-20 pt-28">

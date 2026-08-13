@@ -18,7 +18,9 @@ test.describe("home", () => {
     expect(quebradas, "requisições com falha").toEqual([]);
   });
 
-  test("tem exatamente um h1 e a hierarquia de títulos não pula nível", async ({ page }) => {
+  test("tem exatamente um h1 e a hierarquia de títulos não pula nível", async ({
+    page,
+  }) => {
     await page.goto("/");
 
     await expect(page.locator("h1")).toHaveCount(1);
@@ -67,7 +69,10 @@ test.describe("home", () => {
 
   test("o JSON-LD declara as duas unidades com endereço", async ({ page }) => {
     await page.goto("/");
-    const bruto = await page.locator('script[type="application/ld+json"]').first().textContent();
+    const bruto = await page
+      .locator('script[type="application/ld+json"]')
+      .first()
+      .textContent();
     const dados = JSON.parse(bruto ?? "{}");
 
     const clinica = dados["@graph"].find((n: { "@type": string | string[] }) =>

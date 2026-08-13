@@ -12,7 +12,6 @@
  * negociam formato. PNG ali é compatibilidade, não desleixo.
  */
 
-import { Buffer } from "node:buffer";
 import { readdir, readFile, stat, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -51,7 +50,7 @@ async function* percorrer(dir) {
 
 /** Caminho público (`/images/...`) a partir do caminho no disco. */
 const paraUrl = (arquivo) =>
-  "/" + path.relative(path.join(RAIZ, "public"), arquivo).split(path.sep).join("/");
+  `/${path.relative(path.join(RAIZ, "public"), arquivo).split(path.sep).join("/")}`;
 
 const kb = (bytes) => (bytes / 1024).toFixed(0);
 
@@ -71,7 +70,12 @@ async function main() {
     // `alphaQuality` alto preserva a borda recortada do alinhador; sem isso o
     // canal alfa vira degrau visível contra o brilho de fundo.
     await sharp(entrada)
-      .avif({ quality: QUALIDADE, effort: 6, chromaSubsampling: "4:4:4", ...(meta.hasAlpha ? { alphaQuality: 90 } : {}) })
+      .avif({
+        quality: QUALIDADE,
+        effort: 6,
+        chromaSubsampling: "4:4:4",
+        ...(meta.hasAlpha ? { alphaQuality: 90 } : {}),
+      })
       .toFile(destino);
 
     const miniatura = await sharp(entrada)

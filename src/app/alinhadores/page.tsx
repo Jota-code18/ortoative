@@ -1,7 +1,7 @@
 import Link from "next/link";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
-import { whatsappLink } from "@/lib/site";
 import { metadataDaPagina } from "@/lib/seo";
+import { whatsappLink } from "@/lib/site";
 
 export const metadata = metadataDaPagina({
   titulo: "Alinhadores Ortoative — fabricação própria em Anápolis",
@@ -9,7 +9,6 @@ export const metadata = metadataDaPagina({
     "Alinhadores invisíveis planejados e fabricados pela própria Ortoative em Anápolis. Escaneamento 3D, planejamento digital e acompanhamento completo.",
   caminho: "/alinhadores",
 });
-
 
 const etapas = [
   {
@@ -38,14 +37,19 @@ export default function AlinhadoresPage() {
           O único alinhador <span className="text-primary">fabricado</span> em Anápolis
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Marcas grandes enviam seu caso para fora. Aqui, quem planeja é quem fabrica —
-          e quem fabrica é quem te acompanha.
+          Marcas grandes enviam seu caso para fora. Aqui, quem planeja é quem fabrica — e
+          quem fabrica é quem te acompanha.
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-4">
           {etapas.map((e, i) => (
-            <div key={e.titulo} className="rounded-xl border border-border/70 p-6 transition-colors hover:bg-realce">
-              <span className="text-3xl font-extrabold text-brand-green-text">{i + 1}</span>
+            <div
+              key={e.titulo}
+              className="rounded-xl border border-border/70 p-6 transition-colors hover:bg-realce"
+            >
+              <span className="text-3xl font-extrabold text-brand-green-text">
+                {i + 1}
+              </span>
               <h3 className="mt-2 text-lg">{e.titulo}</h3>
               <p className="mt-2 text-base text-muted-foreground">{e.texto}</p>
             </div>
@@ -74,7 +78,9 @@ export default function AlinhadoresPage() {
             Fazer avaliação rápida
           </Link>
           <a
-            href={whatsappLink("Oi, vi a página do alinhador Ortoative e quero saber mais.")}
+            href={whatsappLink(
+              "Oi, vi a página do alinhador Ortoative e quero saber mais."
+            )}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full border-2 border-brand-green px-6 py-3 font-bold text-brand-green-text hover:bg-brand-green-btn hover:text-white"

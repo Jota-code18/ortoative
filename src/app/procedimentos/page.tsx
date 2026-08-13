@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { procedimentosGrade } from "@/lib/data";
-import { metadataDaPagina } from "@/lib/seo";
 import { previa } from "@/lib/lqip";
+import { metadataDaPagina } from "@/lib/seo";
 
 export const metadata = metadataDaPagina({
   titulo: "Procedimentos",

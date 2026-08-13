@@ -25,9 +25,7 @@ export default function EquipeLocal() {
           <div key={u.slug} className={i === 0 ? "mt-8" : "mt-16"}>
             <Reveal>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h3 className="text-2xl text-primary md:text-3xl">
-                  Unidade {u.nome}
-                </h3>
+                <h3 className="text-2xl text-primary md:text-3xl">Unidade {u.nome}</h3>
                 <p className="text-base text-muted-foreground md:text-lg">
                   {enderecoDe(u)}
                   {u.cep ? ` · CEP ${u.cep}` : ""}

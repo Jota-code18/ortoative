@@ -19,7 +19,10 @@ export default defineConfig({
   },
 
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 } } },
+    {
+      name: "desktop",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 } },
+    },
     /* O celular não é variação secundária: é a maioria do tráfego de uma
        clínica que divulga no Instagram e fecha no WhatsApp. */
     { name: "mobile", use: { ...devices["Pixel 7"] } },

@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import CarrosselTratamentos, {
-  type Tratamento,
-} from "@/components/CarrosselTratamentos";
+import CarrosselTratamentos, { type Tratamento } from "@/components/CarrosselTratamentos";
 import ComparativoTratamentos from "@/components/ComparativoTratamentos";
 import Reveal from "@/components/Reveal";
 import { previa } from "@/lib/lqip";
@@ -65,8 +63,8 @@ export default function Alinhadores() {
               Fixa?
             </h2>
             <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
-              Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual
-              combina com seu caso, sua rotina e seu bolso.
+              Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual combina
+              com seu caso, sua rotina e seu bolso.
             </p>
           </Reveal>
 

@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { enderecoDe, equipe, fabrica, procedimentosGrade, unidades } from "@/lib/data";
 import lqip from "@/lib/lqip.json";
 
-const publico = (url: string) => path.join(process.cwd(), "public", url.replace(/^\//, ""));
+const publico = (url: string) =>
+  path.join(process.cwd(), "public", url.replace(/^\//, ""));
 
 /** Todo caminho de arquivo que os dados prometem que existe. */
 const arquivos = [
@@ -63,7 +64,10 @@ describe("dados da clínica", () => {
   });
 
   it("o slug de cada unidade e procedimento é único", () => {
-    const slugs = [...unidades.map((u) => u.slug), ...procedimentosGrade.map((p) => p.slug)];
+    const slugs = [
+      ...unidades.map((u) => u.slug),
+      ...procedimentosGrade.map((p) => p.slug),
+    ];
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 });

@@ -31,7 +31,8 @@ test.describe("legibilidade", () => {
         const achados: { px: number; texto: string; classe: string }[] = [];
         for (const el of document.querySelectorAll<HTMLElement>("body *")) {
           const temTextoProprio = [...el.childNodes].some(
-            (n) => n.nodeType === Node.TEXT_NODE && (n.textContent ?? "").trim().length > 1
+            (n) =>
+              n.nodeType === Node.TEXT_NODE && (n.textContent ?? "").trim().length > 1
           );
           if (!temTextoProprio) continue;
 

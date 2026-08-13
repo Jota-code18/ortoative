@@ -13,8 +13,8 @@ export default function Implantes() {
       <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 lg:grid-cols-2">
         <Reveal from="left">
           <h2 className="text-3xl md:text-4xl">
-            Implantes com quem tem{" "}
-            <span className="text-brand-green-text">26 anos</span> de experiência
+            Implantes com quem tem <span className="text-brand-green-text">26 anos</span>{" "}
+            de experiência
           </h2>
           <p className="mt-4 max-w-lg text-muted-foreground">
             Recupere a segurança para sorrir, mastigar e conversar. Avaliação completa,

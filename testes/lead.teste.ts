@@ -46,7 +46,12 @@ describe("telefoneValido", () => {
 describe("enviarLead", () => {
   afterEach(() => vi.unstubAllGlobals());
 
-  const dados = { nome: "Maria", telefone: "(62) 98498-3400", trilha: null, respostas: {} };
+  const dados = {
+    nome: "Maria",
+    telefone: "(62) 98498-3400",
+    trilha: null,
+    respostas: {},
+  };
 
   it("manda o lead como JSON para /api/lead", async () => {
     const fetchFalso = vi.fn().mockResolvedValue({ ok: true });

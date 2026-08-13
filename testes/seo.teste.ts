@@ -52,6 +52,30 @@ describe("metadataDaPagina", () => {
 
   it("declara pt-BR — o site é regional", () => {
     const m = metadataDaPagina({ titulo: "T", descricao: "D", caminho: "/x" });
-    expect(m.openGraph).toMatchObject({ locale: "pt_BR" });
+    expect(m.openGraph).toMatchObject({ locale: "pt_BR", type: "website" });
+    expect(m.openGraph?.siteName).toBe(site.name);
+  });
+
+  it("o cartão do X leva título, descrição e imagem grande", () => {
+    // Sobreviveu à mutação antes: o bloco do Twitter não era verificado por
+    // ninguém, então esvaziá-lo não quebrava teste nenhum.
+    const m = metadataDaPagina({
+      titulo: "Equipe",
+      descricao: "Conheça a equipe",
+      caminho: "/equipe",
+    });
+    expect(m.twitter).toMatchObject({
+      card: "summary_large_image",
+      title: `Equipe | ${site.name}`,
+      description: "Conheça a equipe",
+    });
+  });
+
+  it("a descrição vai igual para a meta e para as redes", () => {
+    const descricao = "Alinhadores fabricados na própria clínica, em Anápolis.";
+    const m = metadataDaPagina({ titulo: "T", descricao, caminho: "/x" });
+    expect(m.description).toBe(descricao);
+    expect(m.openGraph?.description).toBe(descricao);
+    expect(m.twitter?.description).toBe(descricao);
   });
 });

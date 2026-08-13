@@ -62,8 +62,8 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-base text-white/70">
-        © {new Date().getFullYear()} Ortoative — Ortodontia Especializada. Todos os direitos
-        reservados. ·{" "}
+        © {new Date().getFullYear()} Ortoative — Ortodontia Especializada. Todos os
+        direitos reservados. ·{" "}
         <Link href="/privacidade" className="inline-block py-1 hover:text-white">
           Política de Privacidade
         </Link>

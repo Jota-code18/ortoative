@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/app/**/{page,layout,loading,error,not-found,route,sitemap,robots}.{ts,tsx}",
+    "e2e/**/*.spec.ts",
+    "testes/**/*.teste.ts",
+    "scripts/*.mjs"
+  ],
+  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.mjs"],
+  "ignore": ["src/types/**"],
+  "ignoreDependencies": [
+    "@tailwindcss/postcss",
+    "tailwindcss",
+    "@stryker-mutator/vitest-runner"
+  ],
+  "ignoreBinaries": ["depcruise", "stryker"]
+}
