@@ -1,0 +1,14 @@
+# Normaliza a quebra de linha: o repositório guarda LF, o checkout usa o padrão
+# do sistema. Sem isso, cada máquina/agente gera diff inteiro só por CRLF.
+* text=auto eol=lf
+
+# Binários — nunca normalizar
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.glb binary
+*.ico binary
+*.woff binary
+*.woff2 binary

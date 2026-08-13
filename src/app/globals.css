@@ -1,0 +1,440 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Opção B — Azul vivo + verde (marca: #003399 / #00B099) */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.24 0.06 262);
+  --card: oklch(1 0 0);
+  /* realce esverdeado usado no hover de cards e linhas */
+  --realce: color-mix(in oklch, var(--brand-green) 8%, white);
+  --card-foreground: oklch(0.24 0.06 262);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.06 262);
+  --primary: oklch(0.47 0.19 262);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.93 0.03 179);
+  --secondary-foreground: oklch(0.371 0.173 262);
+  --muted: oklch(0.955 0.009 264);
+  --muted-foreground: oklch(0.45 0.02 262);
+  --accent: oklch(0.678 0.123 179);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.57 0.22 27);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.906 0.008 261);
+  --input: oklch(0.906 0.008 261);
+  --ring: oklch(0.47 0.19 262);
+  --chart-1: oklch(0.678 0.123 179);
+  --chart-2: oklch(0.47 0.19 262);
+  --chart-3: oklch(0.371 0.173 262);
+  --chart-4: oklch(0.63 0.12 227);
+  --chart-5: oklch(0.78 0.14 80);
+
+  /* Cores exatas da marca */
+  --brand-blue: oklch(0.371 0.173 262);   /* #003399 */
+  --brand-green: oklch(0.678 0.123 179);  /* #00B099 */
+  --brand-green-text: oklch(0.55 0.12 179); /* verde escurecido p/ texto AA */
+  /* Fundo de botão verde: o #00B099 puro com texto branco dá 2.73:1 e reprova
+     em AA. Este tom mantém a leitura de verde da marca e passa com folga. */
+  --brand-green-btn: oklch(0.5 0.11 179);
+
+  /* Hero dark tech (fábrica / 3D) */
+  --hero-dark: oklch(0.18 0.05 262);
+  --hero-glow: oklch(0.75 0.12 179);
+
+  /* Nunito nos títulos (manual da marca); Nunito Sans no corpo — mesma
+     família, terminações retas, melhor para blocos longos de texto */
+  --font-heading: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: oklch(0.16 0.03 262);
+  --foreground: oklch(0.94 0.009 264);
+  --card: oklch(0.21 0.035 262);
+  --card-foreground: oklch(0.94 0.009 264);
+  --popover: oklch(0.21 0.035 262);
+  --popover-foreground: oklch(0.94 0.009 264);
+  --primary: oklch(0.62 0.17 262);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.26 0.035 220);
+  --secondary-foreground: oklch(0.94 0.009 264);
+  --muted: oklch(0.24 0.025 262);
+  --muted-foreground: oklch(0.7 0.02 262);
+  --accent: oklch(0.678 0.123 179);
+  --accent-foreground: oklch(0.16 0.03 262);
+  --destructive: oklch(0.62 0.19 27);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.28 0.024 261);
+  --input: oklch(0.3 0.026 262);
+  --ring: oklch(0.62 0.17 262);
+  --brand-green-text: oklch(0.75 0.12 179);
+  --realce: color-mix(in oklch, var(--brand-green) 14%, var(--card));
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-realce: var(--realce);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-btn: var(--brand-green-btn);
+  --color-brand-green-text: var(--brand-green-text);
+  --color-hero-dark: var(--hero-dark);
+  --color-hero-glow: var(--hero-glow);
+
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  /* Indicador de foco por teclado. Sem isto quem navega por Tab não enxerga
+     onde está (WCAG 2.4.7). :focus-visible não aparece no clique de mouse. */
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  /* sobre fundo escuro o anel azul some — troca por branco */
+  .hero-escuro :focus-visible,
+  header.sobre-hero :focus-visible,
+  footer :focus-visible {
+    outline-color: #fff;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+    font-weight: 800; /* Nunito Extrabold — manual da marca */
+    letter-spacing: -0.01em;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600; /* Nunito Semibold — subtítulos */
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  /* clip (e não hidden) para não criar contexto de scroll nem quebrar sticky —
+     evita barra horizontal causada pelo deslize lateral das animações */
+  overflow-x: clip;
+}
+body {
+  overflow-x: clip;
+}
+
+/* ---- Entrada coreografada da hero ---------------------------------------
+   Fotos revelam por cortina lateral, logo cresce e ganha foco, headline
+   sobe linha a linha de dentro de uma máscara. */
+
+@keyframes hero-curtain-left {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes hero-curtain-right {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes hero-photo-settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-photo-settle-mirrored {
+  from {
+    transform: scaleX(-1) scale(1.12);
+  }
+  to {
+    transform: scaleX(-1) scale(1);
+  }
+}
+
+@keyframes hero-logo-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.88);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-stage-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-curtain-left {
+  animation: hero-curtain-left 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+.hero-curtain-right {
+  animation: hero-curtain-right 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+.hero-photo {
+  animation: hero-photo-settle 2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+.hero-photo-mirrored {
+  animation: hero-photo-settle-mirrored 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+/* Foto da direita: sem espelhar (há logo no jaleco) e deslocada para fora do
+   véu azul, senão o rosto do Dr. Rui cai na parte mais escura */
+@keyframes hero-photo-settle-right {
+  from {
+    transform: scale(1.2) translateX(9%);
+  }
+  to {
+    transform: scale(1.1) translateX(9%);
+  }
+}
+.hero-photo-right {
+  animation: hero-photo-settle-right 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+.hero-logo {
+  animation: hero-logo-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+.hero-stage {
+  animation: hero-stage-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+.hero-line {
+  display: block;
+  overflow: hidden;
+}
+.hero-line > span {
+  display: block;
+  animation: hero-line-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-titulo .hero-line:nth-child(1) > span {
+  animation-delay: 0.95s;
+}
+.hero-titulo .hero-line:nth-child(2) > span {
+  animation-delay: 1.05s;
+}
+/* Texto de apoio entra depois do título */
+p.hero-line > span {
+  animation-delay: 1.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-curtain-left,
+  .hero-curtain-right,
+  .hero-photo,
+  .hero-photo-right,
+  .hero-photo-mirrored,
+  .hero-logo,
+  .hero-stage,
+  .hero-line > span {
+    animation: none;
+  }
+  .hero-photo-mirrored {
+    transform: scaleX(-1);
+  }
+  .hero-photo-right {
+    transform: scale(1.1) translateX(9%);
+  }
+}
+
+/* Headline da hero: leve como o resto do site — sem extrusão 3D, apenas
+   uma sombra discreta para garantir leitura sobre a foto */
+.hero-titulo {
+  text-shadow: 0 2px 14px rgba(0, 12, 40, 0.55);
+}
+
+/* Véu azul que apoia a logo. No mobile a tela é estreita: a mesma elipse do
+   desktop cobre quase tudo e apaga as fotos, então aqui ela é menor, mais
+   curta e menos densa — só o suficiente para a logo ter contraste. */
+.hero-veu {
+  background: radial-gradient(
+    ellipse 44% 34% at 50% 38%,
+    color-mix(in oklch, var(--brand-blue) 82%, transparent) 0%,
+    color-mix(in oklch, var(--brand-blue) 58%, transparent) 34%,
+    color-mix(in oklch, var(--brand-blue) 24%, transparent) 62%,
+    transparent 88%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-veu {
+    background: radial-gradient(
+      ellipse 52% 80% at 47% 44%,
+      color-mix(in oklch, var(--brand-blue) 96%, transparent) 0%,
+      color-mix(in oklch, var(--brand-blue) 85%, transparent) 24%,
+      color-mix(in oklch, var(--brand-blue) 42%, transparent) 52%,
+      color-mix(in oklch, var(--hero-dark) 18%, transparent) 74%,
+      transparent 94%
+    );
+  }
+}
+
+/* ---- Faixa infinita de tratamentos + peças flutuando -------------------- */
+
+@keyframes peca-flutuar {
+  0%,
+  100% {
+    transform: translateY(-8px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(1.5deg);
+  }
+}
+
+/* Apaga a faixa do recuo à esquerda (onde passaria o item anterior) e
+   dissolve a ponta direita em vez de cortar reto. */
+.faixa-mascara {
+  --recuo: 1rem;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(var(--recuo) - 3rem),
+    black var(--recuo),
+    black 94%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(var(--recuo) - 3rem),
+    black var(--recuo),
+    black 94%,
+    transparent 100%
+  );
+}
+.peca-flutuante {
+  animation: peca-flutuar 7s ease-in-out infinite;
+}
+
+/* Peça solta girando devagar: a câmera dá a volta e sobe/desce, como se o
+   alinhador estivesse suspenso sendo examinado. */
+@keyframes peca-girar {
+  0% {
+    transform: perspective(900px) rotateY(-22deg) rotateX(8deg) translateY(-7px);
+  }
+  25% {
+    transform: perspective(900px) rotateY(0deg) rotateX(-10deg) translateY(5px);
+  }
+  50% {
+    transform: perspective(900px) rotateY(22deg) rotateX(8deg) translateY(-7px);
+  }
+  75% {
+    transform: perspective(900px) rotateY(0deg) rotateX(14deg) translateY(6px);
+  }
+  100% {
+    transform: perspective(900px) rotateY(-22deg) rotateX(8deg) translateY(-7px);
+  }
+}
+.peca-girando {
+  animation: peca-girar 16s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .peca-flutuante,
+  .peca-girando {
+    animation: none;
+  }
+}
+/* o realce do item central é calculado em JS; aqui só o amortecimento */
+.item-faixa {
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+.peca-atraso {
+  animation-delay: -3.5s;
+  animation-duration: 8.5s;
+}
+
+/* emenda entre seções: abre em escala vertical ao entrar na viewport */
+.costura-abre {
+  transform-origin: center;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peca-flutuante {
+    animation: none;
+  }
+  .costura-abre {
+    transition: none;
+  }
+}
+
+/* Deslize horizontal sem barra de rolagem visível (nav do header) */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
