@@ -242,21 +242,35 @@ export default function CarrosselTratamentos({
                       "radial-gradient(circle, color-mix(in oklch, var(--brand-green) 22%, transparent) 0%, color-mix(in oklch, var(--primary) 12%, transparent) 45%, transparent 72%)",
                   }}
                 />
-                <Image
-                  src={peca.src}
-                  alt={peca.alt}
-                  width={peca.largura}
-                  height={peca.altura}
-                  sizes="(max-width: 768px) 34vw, 30vw"
-                  /* o arco é largo e baixo: preso a 86% da caixa quadrada ele
-                     ficaria pequeno demais, então ocupa a largura toda */
-                  className={`absolute inset-0 m-auto w-auto object-contain ${
-                    peca.girar
-                      ? "peca-girando max-h-[86%] max-w-full"
-                      : "peca-flutuante max-h-[86%] max-w-[86%]"
-                  }`}
-                  {...previa(peca.src)}
-                />
+                {/* Duas camadas para a peça que gira: a de fora inclina (a
+                    "câmera" subindo e descendo) e a de dentro dá a volta. Numa
+                    camada só, a segunda transformação sobrescreveria a matriz
+                    da primeira e o giro perderia a inclinação. */}
+                {peca.girar ? (
+                  <div className="peca-orbita pointer-events-none absolute inset-0">
+                    <Image
+                      src={peca.src}
+                      alt={peca.alt}
+                      width={peca.largura}
+                      height={peca.altura}
+                      sizes="(max-width: 768px) 34vw, 30vw"
+                      /* o arco é largo e baixo: preso a 86% da caixa quadrada
+                         ele ficaria pequeno demais, então ocupa a largura toda */
+                      className="peca-girando absolute inset-0 m-auto max-h-[86%] w-auto max-w-full object-contain"
+                      {...previa(peca.src)}
+                    />
+                  </div>
+                ) : (
+                  <Image
+                    src={peca.src}
+                    alt={peca.alt}
+                    width={peca.largura}
+                    height={peca.altura}
+                    sizes="(max-width: 768px) 34vw, 30vw"
+                    className="peca-flutuante absolute inset-0 m-auto max-h-[86%] w-auto max-w-[86%] object-contain"
+                    {...previa(peca.src)}
+                  />
+                )}
               </div>
             </div>
           ))}

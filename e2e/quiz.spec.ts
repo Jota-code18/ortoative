@@ -9,15 +9,39 @@ test.describe("triagem", () => {
   const opcoes = (page: import("@playwright/test").Page) =>
     page.locator("#avaliacao button").filter({ hasNot: page.locator("svg") });
 
+  /**
+   * Avança até o passo de contato.
+   *
+   * Espera o enunciado mudar entre um clique e o outro em vez de clicar em
+   * sequência: o bloco do passo é remontado a cada resposta (é o que dispara a
+   * animação de entrada), e sob carga o clique seguinte pegava o elemento
+   * antigo, já descartado.
+   */
+  async function ateOContato(page: import("@playwright/test").Page) {
+    const nome = page.getByPlaceholder("Seu nome");
+    /* O contador "N/M" é o sinal confiável de que o passo avançou: o enunciado
+       pode repetir entre trilhas, o número não. */
+    const contador = page.locator("#avaliacao span").filter({ hasText: /^\d+\// });
+
+    for (let i = 0; i < 12; i++) {
+      if (await nome.isVisible()) return;
+      const antes = await contador.innerText();
+      await opcoes(page).first().click();
+      await expect
+        .poll(async () => ((await nome.isVisible()) ? "contato" : contador.innerText()), {
+          timeout: 10_000,
+        })
+        .not.toBe(antes);
+    }
+    await expect(nome, "não chegou ao passo de contato").toBeVisible();
+  }
+
   test("percorre uma trilha até o passo de contato", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Dentes tortos ou desalinhados" }).click();
 
     // avança escolhendo sempre a primeira opção até chegar no formulário
-    for (let i = 0; i < 10; i++) {
-      if (await page.getByPlaceholder("Seu nome").isVisible()) break;
-      await opcoes(page).first().click();
-    }
+    await ateOContato(page);
 
     await expect(page.getByPlaceholder("Seu nome")).toBeVisible();
     await expect(page.getByPlaceholder("Telefone com DDD")).toBeVisible();
@@ -38,10 +62,7 @@ test.describe("triagem", () => {
   test("o botão de concluir só libera com telefone válido", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Dor de dente" }).click();
-    for (let i = 0; i < 10; i++) {
-      if (await page.getByPlaceholder("Seu nome").isVisible()) break;
-      await opcoes(page).first().click();
-    }
+    await ateOContato(page);
 
     const enviar = page.getByRole("button", { name: /Concluir|Enviando/ });
     await expect(enviar).toBeDisabled();
@@ -57,10 +78,7 @@ test.describe("triagem", () => {
   test("o telefone ganha máscara enquanto é digitado", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Dor de dente" }).click();
-    for (let i = 0; i < 10; i++) {
-      if (await page.getByPlaceholder("Seu nome").isVisible()) break;
-      await opcoes(page).first().click();
-    }
+    await ateOContato(page);
 
     const campo = page.getByPlaceholder("Telefone com DDD");
     await campo.fill("62984983400");
@@ -76,10 +94,7 @@ test.describe("triagem", () => {
 
     await page.goto("/");
     await page.getByRole("button", { name: "Dentes tortos ou desalinhados" }).click();
-    for (let i = 0; i < 10; i++) {
-      if (await page.getByPlaceholder("Seu nome").isVisible()) break;
-      await opcoes(page).first().click();
-    }
+    await ateOContato(page);
 
     await page.getByPlaceholder("Seu nome").fill("Maria Teste");
     await page.getByPlaceholder("Telefone com DDD").fill("62984983400");

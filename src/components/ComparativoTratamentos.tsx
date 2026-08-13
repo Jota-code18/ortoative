@@ -136,14 +136,18 @@ function Painel({
         className="mx-auto mb-2 block h-1 w-10 rounded-full"
         style={{ background: verde ? "var(--brand-green-btn)" : "var(--primary)" }}
       />
+      {/* Nível 1 da hierarquia: o nome do tratamento. É o maior e o mais
+          escuro do bloco — quem bate o olho lê isto primeiro. */}
       <span
-        className={`block text-sm font-bold leading-tight md:text-lg ${
+        className={`block text-base font-extrabold leading-tight md:text-xl ${
           verde ? "text-brand-green-text" : "text-primary"
         }`}
       >
         {nome}
       </span>
-      <span className="mt-1 block text-sm font-normal text-muted-foreground md:text-base">
+      {/* Nível 3: rótulo de apoio. Caixa alta e pequeno para ler como etiqueta,
+          não como frase — assim não compete com o nome logo acima. */}
+      <span className="mt-1.5 block text-sm font-semibold uppercase tracking-wide text-muted-foreground">
         {resumo}
       </span>
     </div>
@@ -154,7 +158,10 @@ export default function ComparativoTratamentos() {
   return (
     <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
       <div className="px-4 pt-6 text-center md:px-8">
-        <h3 className="text-2xl md:text-3xl">Entenda qual o melhor para você!</h3>
+        <p className="mb-1 text-sm font-bold uppercase tracking-wide text-brand-green-text">
+          Comparativo
+        </p>
+        <h3 className="text-2xl md:text-4xl">Entenda qual o melhor para você!</h3>
         <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
           Os dois corrigem — e aqui fazemos os dois. A diferença não é qualidade, é
           rotina: o que o seu caso pede e o que combina com o seu dia a dia.
@@ -195,17 +202,22 @@ export default function ComparativoTratamentos() {
                 key={criterio}
                 className="border-t border-border/70 transition-colors hover:bg-realce max-md:mt-3 max-md:grid max-md:grid-cols-2 max-md:gap-x-2 max-md:rounded-2xl max-md:border max-md:border-border/70 max-md:p-3"
               >
+                {/* Nível 2: o critério. Cor de texto cheia e peso alto contra
+                    as respostas, que ficam em cinza — é o que dá o "leia esta
+                    linha, depois compare os dois lados". */}
                 <th
                   scope="row"
-                  className="p-3 text-left align-middle font-semibold max-md:col-span-2 max-md:p-0 max-md:pb-2"
+                  className="p-3 text-left align-middle max-md:col-span-2 max-md:p-0 max-md:pb-2.5"
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2.5">
                     <span className="text-brand-green-text">{icone}</span>
-                    <span>{criterio}</span>
+                    <span className="text-base font-bold text-foreground md:text-lg">
+                      {criterio}
+                    </span>
                   </span>
                 </th>
 
-                <td className="p-3 align-middle text-muted-foreground max-md:p-0">
+                <td className="p-3 align-middle leading-snug text-muted-foreground max-md:p-0">
                   <span
                     aria-hidden="true"
                     className="mb-1 block text-sm font-bold uppercase tracking-wide text-brand-green-text md:hidden"
@@ -215,7 +227,7 @@ export default function ComparativoTratamentos() {
                   {alinhador}
                 </td>
 
-                <td className="p-3 align-middle text-muted-foreground max-md:p-0">
+                <td className="p-3 align-middle leading-snug text-muted-foreground max-md:p-0">
                   <span
                     aria-hidden="true"
                     className="mb-1 block text-sm font-bold uppercase tracking-wide text-primary md:hidden"

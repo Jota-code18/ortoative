@@ -45,6 +45,10 @@ module.exports = {
           "(^|/)tsconfig\\.json$",
           "^src/app/", // rota é ponto de entrada por convenção do App Router
           "^src/types/",
+          /* Pontos de entrada do próprio Next: ninguém os importa, o framework
+             os carrega pelo nome do arquivo. */
+          "^src/instrumentation(-client)?\.ts$",
+          "^src/sentry\.(server|edge)\.config\.ts$",
         ],
       },
       to: {},

@@ -19,7 +19,7 @@ export default function QuizCta() {
           "linear-gradient(to bottom, var(--hero-dark) 0%, var(--brand-blue) 9%, var(--brand-blue) 100%)",
       }}
     >
-      <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+      <div className="mx-auto max-w-6xl px-4 py-5 md:py-10">
         <Reveal>
           <QuizInline />
         </Reveal>

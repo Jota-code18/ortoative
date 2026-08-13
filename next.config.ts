@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   images: {
     // AVIF/WebP reduzem bastante o peso das fotos de pacientes e equipe
     formats: ["image/avif", "image/webp"],
+    /* O Next 16 exige declarar as qualidades permitidas. Sem isto, o
+       `quality={92}` das fotos do hero era silenciosamente rebaixado para 75 —
+       o servidor avisava em log e mais nada, então a foto principal do site
+       saía pior do que o código pedia. */
+    qualities: [75, 92],
   },
   // Evita o aviso de múltiplos lockfiles (existe um package-lock.json em ~)
   turbopack: {

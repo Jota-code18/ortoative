@@ -9,7 +9,7 @@ import { depoimentos, stats } from "@/lib/data";
  */
 export default function ProvaSocial() {
   return (
-    <section className="py-8 md:py-10">
+    <section className="py-5 md:py-10">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid gap-4 text-center sm:grid-cols-2 md:grid-cols-4">
           {stats.map((s, i) => (
