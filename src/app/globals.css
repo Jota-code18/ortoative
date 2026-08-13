@@ -438,3 +438,135 @@ p.hero-line > span {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ==========================================================================
+   Carregamento: esqueleto, progresso e chegada de conteúdo
+
+   A régua deste bloco é a mesma do resto do site: só transform, opacity e
+   filter; curva própria; e caminho de movimento reduzido escrito junto.
+   ========================================================================== */
+
+/* Esqueleto — o brilho corre em transform sobre um pseudo-elemento. Animar
+   `background-position` obrigaria o navegador a repintar o gradiente inteiro a
+   cada frame; translateX fica no compositor. */
+.esqueleto {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.esqueleto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklch, var(--foreground) 4%, transparent) 45%,
+    color-mix(in oklch, var(--foreground) 7%, transparent) 50%,
+    color-mix(in oklch, var(--foreground) 4%, transparent) 55%,
+    transparent 100%
+  );
+  animation: esqueleto-brilho 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes esqueleto-brilho {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Barra de progresso determinada: a largura vem de --progresso, mas quem anima
+   é scaleX, que não força reflow. */
+.progresso-trilho {
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--foreground) 10%, transparent);
+}
+.progresso-barra {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(var(--progresso, 0));
+  background: var(--brand-green-btn);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Chegada de um bloco depois do esqueleto: mesma receita do Reveal, sem o
+   deslocamento — o conteúdo já estava reservado no lugar certo, então mover
+   seria mentira sobre o que aconteceu. */
+.conteudo-chega {
+  animation: conteudo-chega 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes conteudo-chega {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Passo do quiz. Entrada com deslize curto; saída sem deslocamento e mais
+   rápida — quem sai não disputa atenção com quem entra. */
+.passo-entra {
+  animation: passo-entra 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.passo-sai {
+  animation: passo-sai 0.16s cubic-bezier(0.4, 0, 1, 1) both;
+}
+@keyframes passo-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+@keyframes passo-sai {
+  to {
+    opacity: 0;
+    filter: blur(3px);
+  }
+}
+
+/* Rodinha do botão de envio. Linear de propósito: rotação constante é a única
+   leitura honesta de "não sei quanto falta". */
+.girando {
+  animation: girando 0.7s linear infinite;
+}
+@keyframes girando {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* Retorno tátil no toque. Só em ponteiro fino: no celular o dedo tampa o
+   botão e o realce vira sujeira visual. */
+@media (hover: hover) and (pointer: fine) {
+  .tatil {
+    transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .tatil:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto::after,
+  .girando {
+    animation: none;
+  }
+  .conteudo-chega,
+  .passo-entra,
+  .passo-sai {
+    animation-duration: 0.01ms;
+  }
+  .progresso-barra,
+  .tatil {
+    transition: none;
+  }
+  /* sem o brilho, o esqueleto precisa de contraste próprio para não sumir */
+  .esqueleto {
+    background: color-mix(in oklch, var(--foreground) 8%, var(--muted));
+  }
+}

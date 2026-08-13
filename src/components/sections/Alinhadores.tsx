@@ -5,6 +5,7 @@ import CarrosselTratamentos, {
 } from "@/components/CarrosselTratamentos";
 import ComparativoTratamentos from "@/components/ComparativoTratamentos";
 import Reveal from "@/components/Reveal";
+import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: alinhadores e ortodontia fixa — faixa infinita alternando os dois
@@ -78,6 +79,7 @@ export default function Alinhadores() {
               height={373}
               sizes="(max-width: 768px) 45vw, 224px"
               className="h-auto w-40 md:w-56"
+              {...previa("/images/alinhadores/estojo-aberto.avif")}
             />
           </Reveal>
         </div>

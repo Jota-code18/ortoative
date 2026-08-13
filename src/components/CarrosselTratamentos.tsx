@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import NumeroAnimado from "@/components/NumeroAnimado";
+import { previa } from "@/lib/lqip";
 
 export type Tratamento = {
   titulo: string;
@@ -254,6 +255,7 @@ export default function CarrosselTratamentos({
                       ? "peca-girando max-h-[86%] max-w-full"
                       : "peca-flutuante max-h-[86%] max-w-[86%]"
                   }`}
+                  {...previa(peca.src)}
                 />
               </div>
             </div>

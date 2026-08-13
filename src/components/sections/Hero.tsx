@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ModelViewer from "@/components/ModelViewer";
+import { previa } from "@/lib/lqip";
 
 /**
  * Hero visual: fotos nas laterais dissolvendo em um azul difuso ao centro,
@@ -29,6 +30,7 @@ export default function Hero() {
              necessário, por isso `sizes` bem acima da largura do bloco. */
           sizes="(max-width: 768px) 100vw, 75vw"
           className="hero-photo object-cover object-center"
+          {...previa("/images/hero/esquerda-hero.avif")}
         />
       </div>
 
@@ -50,6 +52,7 @@ export default function Hero() {
           quality={92}
           sizes="(max-width: 768px) 100vw, 75vw"
           className="hero-photo-right object-cover object-top"
+          {...previa("/images/hero/direita-equipe.avif")}
         />
       </div>
 

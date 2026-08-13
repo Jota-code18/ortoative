@@ -1,8 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 // só tipos: não entra no bundle, o three em si é carregado sob demanda
 import type * as TRES from "three";
+import Skeleton from "@/components/Skeleton";
+import { unidades } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Passeio 3D pelo espaço da Ortoative.
@@ -19,6 +23,14 @@ import type * as TRES from "three";
  */
 
 const DURACAO = 10; // segundos de passeio
+
+/**
+ * Fachada da unidade, para segurar o lugar quando o WebGL falha ou o download
+ * do modelo não completa. Sai da mesma fonte que alimenta a seção — assim o
+ * caminho não se perde quando o formato do acervo muda.
+ */
+const fachadaDaUnidade = (nome: string) =>
+  unidades.find((u) => u.nome === nome)?.fachada ?? unidades[0].fachada;
 
 const suavizar = (u: number) => -(Math.cos(Math.PI * u) - 1) / 2;
 const suave = (a: number, b: number, x: number) => {
@@ -334,39 +346,50 @@ export default function CenaClinica3D({
       >
         <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
 
-        {/* Estado de carga — os modelos têm 10 e 13 MB */}
+        {/* Estado de carga — os modelos têm 10 e 13 MB, então isso fica na
+            tela por vários segundos em rede de celular. O esqueleto ocupa o
+            quadro inteiro para o bloco não parecer um buraco na página. */}
         {estado !== "pronto" && estado !== "erro" && (
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 p-6 md:p-10">
-            <div className="h-[3px] w-[min(320px,60%)] overflow-hidden rounded-full bg-black/10">
-              <div
-                className="h-full bg-brand-green transition-[width] duration-300"
-                style={{ width: `${progressoCarga}%` }}
-              />
+          <>
+            <Skeleton arredondado="" className="absolute inset-0" />
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 p-6 md:p-10">
+              <div className="progresso-trilho h-[3px] w-[min(320px,60%)]">
+                <div
+                  className="progresso-barra"
+                  style={{ "--progresso": progressoCarga / 100 } as React.CSSProperties}
+                />
+              </div>
+              <p className="text-sm tracking-[0.2em] text-muted-foreground">
+                CARREGANDO {unidade.toUpperCase()} — {progressoCarga}%
+              </p>
             </div>
-            <p className="text-sm tracking-[0.2em] text-muted-foreground">
-              CARREGANDO {unidade.toUpperCase()} — {progressoCarga}%
-            </p>
-          </div>
+          </>
         )}
 
         {/* Sem WebGL ou com falha no download: a fachada real segura o lugar */}
         {estado === "erro" && (
           <div className="absolute inset-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`/images/${unidade === "Goianésia" ? "goianesia" : "clinica"}/fachada.jpg`}
+            <Image
+              src={fachadaDaUnidade(unidade)}
               alt={`Fachada da Ortoative — ${unidade}`}
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 1152px"
+              className="object-cover"
+              {...previa(fachadaDaUnidade(unidade))}
             />
           </div>
         )}
 
         {/* Linha de progresso do passeio */}
         {estado === "pronto" && (
-          <div className="absolute inset-x-0 bottom-0 h-[3px] bg-black/10">
+          <div className="progresso-trilho absolute inset-x-0 bottom-0 h-[3px] rounded-none">
             <div
-              className="h-full bg-brand-green"
-              style={{ width: `${(progressoFilme * 100).toFixed(1)}%` }}
+              className="progresso-barra rounded-none"
+              /* sem transição aqui: o valor já chega suave, quadro a quadro,
+                 do laço de animação — amortecer de novo criaria atraso */
+              style={
+                { "--progresso": progressoFilme, transition: "none" } as React.CSSProperties
+              }
             />
           </div>
         )}

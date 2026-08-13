@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { fabrica } from "@/lib/data";
+import { previa } from "@/lib/lqip";
 
 /**
  * Tecnologia & Fábrica — o diferencial que nenhuma marca grande mostra.
@@ -47,6 +48,7 @@ export default function TecnologiaBlog() {
                   fill
                   sizes="(max-width: 640px) 100vw, 50vw"
                   className="object-cover"
+                  {...previa(e.src)}
                 />
               </div>
               <div className="p-5">

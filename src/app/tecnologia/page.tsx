@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { fabrica } from "@/lib/data";
 import { metadataDaPagina } from "@/lib/seo";
+import { previa } from "@/lib/lqip";
 
 export const metadata = metadataDaPagina({
   titulo: "Tecnologia & Fábrica",
@@ -45,6 +46,7 @@ export default function TecnologiaPage() {
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
+                {...previa(e.src)}
               />
             </div>
             <div className="p-5">

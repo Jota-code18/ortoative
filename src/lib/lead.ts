@@ -18,20 +18,25 @@ export function telefoneValido(valor: string) {
 /**
  * Avisa a recepção por e-mail. Falha aqui não pode interromper o paciente —
  * o WhatsApp segue como caminho principal.
+ *
+ * Devolve se deu certo para a tela poder dar retorno, mas nunca lança: quem
+ * chama decide o que fazer, e a resposta padrão é seguir em frente.
  */
 export async function enviarLead(dados: {
   nome: string;
   telefone: string;
   trilha: TrilhaId | null;
   respostas: Record<string, string>;
-}) {
+}): Promise<boolean> {
   try {
-    await fetch("/api/lead", {
+    const r = await fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados),
     });
+    return r.ok;
   } catch (erro) {
     console.error("[lead] não foi possível avisar a recepção:", erro);
+    return false;
   }
 }
