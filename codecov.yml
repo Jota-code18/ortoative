@@ -1,0 +1,28 @@
+# A cobertura mede `src/lib/`, que é lógica pura. Componente visual fica por
+# conta do Playwright — perseguir percentual em JSX produz teste que renderiza
+# e não afirma nada.
+coverage:
+  status:
+    project:
+      default:
+        target: 85%
+        # Variação natural entre execuções não deve reprovar PR.
+        threshold: 2%
+    patch:
+      default:
+        # Código novo entra coberto. É mais fácil cobrar aqui do que recuperar
+        # cobertura depois.
+        target: 80%
+        threshold: 0%
+
+comment:
+  layout: "condensed_header, diff, flags, files"
+  require_changes: true
+
+ignore:
+  - "src/app/**"
+  - "src/components/**"
+  - "src/lib/lqip.ts" # só lê um JSON gerado
+  - "e2e/**"
+  - "testes/**"
+  - "scripts/**"

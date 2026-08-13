@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import { previa } from "@/lib/lqip";
 import { metadataDaPagina } from "@/lib/seo";
 import { whatsappLink } from "@/lib/site";
 
@@ -116,6 +117,8 @@ export default async function ProcedimentoPage({
   const proc = conteudo[slug];
   if (!proc) notFound();
 
+  const foto = `/images/procedimentos/${slug}.avif`;
+
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-28">
       <h1 className="text-4xl md:text-5xl">{proc.nome}</h1>
@@ -123,13 +126,14 @@ export default async function ProcedimentoPage({
 
       <div className="mt-8 overflow-hidden rounded-2xl">
         <Image
-          src={`/images/procedimentos/${slug}.jpg`}
+          src={foto}
           alt={proc.nome}
           width={1200}
           height={800}
           sizes="(max-width: 768px) 100vw, 900px"
           className="aspect-[3/2] w-full object-cover"
           priority
+          {...previa(foto)}
         />
       </div>
 

@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "imagens:avif": "node scripts/imagens-avif.mjs --limpar",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:cobertura": "vitest run --coverage",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@google/model-viewer": "^4.3.1",
@@ -19,15 +22,18 @@
     "three": "^0.183.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.183.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "sharp": "^0.35.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }

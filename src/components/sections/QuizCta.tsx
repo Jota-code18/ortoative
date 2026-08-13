@@ -10,7 +10,10 @@ export default function QuizCta() {
     /* Nasce do escuro da hero em poucos pixels e mantém o azul: a emenda de
        saída fica a cargo do componente Costura. */
     <section
-      className="text-white"
+      /* âncora estável: anúncio e link de campanha caem direto na triagem */
+      id="avaliacao"
+      aria-label="Avaliação gratuita"
+      className="scroll-mt-20 text-white"
       style={{
         background:
           "linear-gradient(to bottom, var(--hero-dark) 0%, var(--brand-blue) 9%, var(--brand-blue) 100%)",
