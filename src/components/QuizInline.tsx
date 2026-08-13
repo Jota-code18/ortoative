@@ -52,7 +52,7 @@ export default function QuizInline() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[300px] w-full max-w-3xl flex-col justify-center">
+    <div className="mx-auto flex min-h-[240px] w-full max-w-3xl flex-col justify-center md:min-h-[300px]">
       {concluido ? (
         <div className="passo-entra text-center">
           <h2 className="text-2xl md:text-3xl">
@@ -81,7 +81,7 @@ export default function QuizInline() {
         </div>
       ) : (
         <>
-          <div className="mb-5 flex items-center gap-3">
+          <div className="mb-3 flex items-center gap-3 md:mb-5">
             {/* Antes da trilha ser escolhida o total ainda não existe: mostra
                 uma régua estimada para a barra não encolher depois */}
             <div className="flex flex-1 gap-1.5" aria-hidden="true">
@@ -172,15 +172,15 @@ export default function QuizInline() {
               </>
             ) : (
               <>
-                <h2 className="text-center text-2xl md:text-3xl">{etapa.titulo}</h2>
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
+                <h2 className="text-center text-xl md:text-3xl">{etapa.titulo}</h2>
+                <div className="mt-3 flex flex-wrap justify-center gap-1.5 md:mt-5 md:gap-2">
                   {etapa.opcoes.map((opcao) => (
                     <button
                       key={opcao.label}
                       type="button"
                       onClick={() => responder(etapa.id, opcao.label, opcao.trilha)}
                       /* min-h de 44px: alvo de toque confortável (WCAG 2.5.8) */
-                      className="tatil flex min-h-[44px] items-center rounded-full border border-white/25 bg-white/5 px-4 text-sm font-semibold text-white transition-colors hover:border-brand-green hover:bg-brand-green-btn"
+                      className="tatil flex min-h-[44px] items-center rounded-full border border-white/25 bg-white/5 px-3.5 text-sm font-semibold leading-tight text-white transition-colors hover:border-brand-green hover:bg-brand-green-btn md:px-4"
                     >
                       {opcao.label}
                     </button>
@@ -190,7 +190,7 @@ export default function QuizInline() {
             )}
           </div>
 
-          <div className="mt-5 flex items-center justify-center gap-4 text-sm text-white/75 md:text-base">
+          <div className="mt-4 flex items-center justify-center gap-4 text-sm text-white/75 md:mt-5 md:text-base">
             {passo > 0 && (
               <button
                 type="button"

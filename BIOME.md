@@ -6,7 +6,7 @@ também a exceção.
 
 | Onde | Regra | Motivo |
 |---|---|---|
-| `scripts/**` | `noConsole` | O `console` **é** a saída de um script de linha de comando. Silenciá-lo tiraria o relatório de conversão de imagem. |
+| `scripts/**` | `noConsole`, `noExcessiveCognitiveComplexity` | O `console` **é** a saída de um script de linha de comando. E a ramificação desses scripts está no relatório que eles imprimem — tamanho antes, tamanho depois, o que foi pulado —, não no desenho. |
 | `e2e/**`, `testes/**` | `noExcessiveCognitiveComplexity`, `useIterableCallbackReturn` | Callback de `page.evaluate` roda no navegador e costuma varrer o DOM inteiro. A complexidade está no que se mede, não no design. |
 | `DadosEstruturados.tsx` | `noDangerouslySetInnerHtml` | JSON-LD exige `<script type="application/ld+json">` com conteúdo bruto. O dado é próprio, montado no servidor, sem nada vindo do usuário. |
 | `ModelViewer.tsx` | `noImgElement`, `useAriaPropsSupportedByRole` | O `poster` aparece antes de o custom element `<model-viewer>` hidratar. Passar pelo `next/image` inseriria um wrapper que quebra o slot do elemento. |

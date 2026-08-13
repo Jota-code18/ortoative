@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import CarrosselTratamentos, { type Tratamento } from "@/components/CarrosselTratamentos";
-import ComparativoTratamentos from "@/components/ComparativoTratamentos";
+import AlinhadoresCarrossel from "@/components/AlinhadoresCarrossel";
+import type { Tratamento } from "@/components/CarrosselTratamentos";
 import Reveal from "@/components/Reveal";
 import { previa } from "@/lib/lqip";
 
@@ -84,17 +84,9 @@ export default function Alinhadores() {
         </div>
       </div>
 
-      <Reveal delay={80}>
-        <div className="mt-4">
-          <CarrosselTratamentos tratamentos={tratamentos} pecas={pecas} />
-        </div>
-      </Reveal>
+      <AlinhadoresCarrossel tratamentos={tratamentos} pecas={pecas} />
 
-      <div className="mx-auto mt-5 max-w-5xl px-4 md:mt-8">
-        <Reveal>
-          <ComparativoTratamentos />
-        </Reveal>
-
+      <div className="mx-auto max-w-5xl px-4">
         <Reveal delay={100}>
           <p className="mt-5 text-center">
             <Link
