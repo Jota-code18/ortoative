@@ -1,0 +1,70 @@
+name: Deploy
+
+# Só no merge para main. Como main só recebe merge via PR com check verde,
+# tudo que chega aqui já passou por typecheck, lint, contrato de arquitetura,
+# testes e ponta a ponta.
+on:
+  push:
+    branches: [main]
+  # Permite subir uma versão específica pela interface do GitHub, sem
+  # precisar de commit novo — útil para reverter rápido.
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-producao
+  # Deploy NÃO é cancelável: interromper no meio deixa a produção num estado
+  # que ninguém sabe qual é.
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    name: Publicar em produção
+    runs-on: ubuntu-latest
+    environment:
+      name: producao
+      url: https://www.ortoative.com.br
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ENV: producao
+
+      # ─────────────────────────────────────────────────────────────────────
+      # Destino ainda não definido. O passo fica isolado de propósito: quando
+      # a hospedagem for escolhida, só este bloco muda — o resto do pipeline
+      # já está provado.
+      #
+      # Vercel (caminho natural para Next 16):
+      #   - uses: amondnet/vercel-action@v25
+      #     with:
+      #       vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #       vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #       vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+      #       vercel-args: "--prod"
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Publicar
+        run: |
+          echo "::warning::Destino de deploy não configurado."
+          echo "O build passou e o artefato está pronto em .next/."
+          echo "Veja o bloco comentado em .github/workflows/deploy.yml."
+
+      - name: Fumaça
+        # Quando o deploy estiver ligado, este passo roda contra a URL real e
+        # é o que separa "publicou" de "publicou e funciona".
+        if: false
+        run: npx playwright test e2e/navegacao.spec.ts
+        env:
+          PLAYWRIGHT_BASE_URL: https://www.ortoative.com.br

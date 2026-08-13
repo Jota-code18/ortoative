@@ -1,0 +1,177 @@
+name: PR
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# PR novo cancela a execução anterior da mesma branch: minuto de runner não
+# deve ser gasto conferindo commit que já foi substituído.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  estatica:
+    name: Análise estática
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Tipos
+        run: npm run typecheck
+
+      - name: Formatação e lint (Biome)
+        run: npm run format:check
+
+      - name: Lint (regras do Next)
+        run: npm run lint
+
+      - name: Código sem uso (Knip)
+        run: npm run knip
+
+      - name: Contrato de arquitetura
+        run: npm run arquitetura
+
+  commits:
+    name: Mensagens de commit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # commitlint precisa do histórico para comparar a branch com a base
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Conventional Commits
+        run: >
+          npx commitlint
+          --from ${{ github.event.pull_request.base.sha }}
+          --to ${{ github.event.pull_request.head.sha }}
+          --verbose
+
+  testes:
+    name: Testes e cobertura
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Vitest com cobertura
+        run: npm run test:cobertura
+
+      - name: Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # Instabilidade do Codecov não deve reprovar código que passou
+          fail_ci_if_error: false
+
+  e2e:
+    name: Ponta a ponta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      # O cache do Next corta o build, que é o passo mais caro do e2e.
+      - name: Cache do build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+
+      - name: Navegadores do Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright (desktop e celular)
+        run: npm run test:e2e
+
+      - name: Relatório
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  mutacao:
+    name: Teste de mutação
+    runs-on: ubuntu-latest
+    # Só na base: leva alguns minutos e o retorno é tendência, não porteiro
+    # de PR. O que barra PR é a cobertura, que roda no job de testes.
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run test:mutacao
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: relatorio-mutacao
+          path: reports/mutation/
+          retention-days: 7
+
+  build:
+    name: Build de produção
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Cache do build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+
+      - name: Build
+        run: npm run build
+        env:
+          # Sem token, o wrapper do Sentry não tenta subir mapa de fontes.
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      - name: Confere que o acervo continua em AVIF
+        # Regressão barata de acontecer: alguém adiciona um JPEG na pressa e o
+        # ganho de 57% de peso vai embora sem ninguém notar.
+        run: |
+          sobras=$(find public/images -type f \( -name '*.jpg' -o -name '*.png' \) \
+            -not -path 'public/images/marca/*' -not -path 'public/images/og/*')
+          if [ -n "$sobras" ]; then
+            echo "::error::Imagem fora do AVIF em public/images. Rode npm run imagens:avif"
+            echo "$sobras"
+            exit 1
+          fi
