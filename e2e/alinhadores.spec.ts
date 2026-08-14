@@ -108,7 +108,6 @@ test.describe("página dos alinhadores", () => {
         await new Promise((r) => setTimeout(r, 40));
       }
     });
-    await page.waitForLoadState("networkidle");
 
     const quebradas = await page.evaluate(() =>
       [...document.images]
