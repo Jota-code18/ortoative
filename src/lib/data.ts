@@ -97,7 +97,6 @@ export type Unidade = {
   cep?: string;
   fachada: string;
   interiores: { src: string; alt: string }[];
-  modelo3d: string;
 };
 
 /** endereço em uma linha, do jeito que aparece na tela */
@@ -125,7 +124,6 @@ export const unidades: Unidade[] = [
         alt: "Consultório da unidade de Anápolis",
       },
     ],
-    modelo3d: "/models/clinica.glb",
   },
   {
     slug: "goianesia",
@@ -150,7 +148,6 @@ export const unidades: Unidade[] = [
         alt: "Consultório da unidade de Goianésia",
       },
     ],
-    modelo3d: "/models/clinicagoianesia.glb",
   },
 ];
 

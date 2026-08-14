@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import CenaClinica3D from "@/components/CenaClinica3D";
 import EquipeRows from "@/components/EquipeRows";
+import PasseioVideo from "@/components/PasseioVideo";
 import Reveal from "@/components/Reveal";
 import { enderecoDe, unidades } from "@/lib/data";
 import { previa } from "@/lib/lqip";
@@ -65,7 +65,7 @@ export default function EquipeLocal() {
 
             <Reveal delay={60}>
               <div className="mt-4">
-                <CenaClinica3D modelo={u.modelo3d} unidade={u.nome} />
+                <PasseioVideo slug={u.slug} unidade={u.nome} />
               </div>
             </Reveal>
           </div>

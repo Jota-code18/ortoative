@@ -48,3 +48,8 @@ next-env.d.ts
 
 # stryker
 /reports
+
+# Modelos-fonte dos passeios: continuam no disco para regravar o vídeo
+# (npm run passeios:gravar), mas não são servidos nem precisam ir no deploy.
+/public/models/clinica.glb
+/public/models/clinicagoianesia.glb
