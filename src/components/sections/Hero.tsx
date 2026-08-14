@@ -15,7 +15,7 @@ export default function Hero() {
     >
       {/* Foto esquerda — dissolve gradualmente em direção ao centro */}
       <div
-        className="hero-curtain-left absolute inset-y-0 left-0 w-[48%]"
+        className="hero-curtain-left absolute inset-y-0 left-0 w-[64%] md:w-[48%]"
         style={{
           maskImage:
             "linear-gradient(to right, black 0%, rgba(0,0,0,.92) 24%, rgba(0,0,0,.45) 62%, transparent 96%)",
@@ -31,7 +31,7 @@ export default function Hero() {
           quality={92}
           /* O recorte é mais alto que largo: a altura é que manda no tamanho
              necessário, por isso `sizes` bem acima da largura do bloco. */
-          sizes="(max-width: 768px) 100vw, 75vw"
+          sizes="(max-width: 768px) 130vw, 75vw"
           className="hero-photo object-cover object-center"
           {...previa("/images/hero/esquerda-hero.avif")}
         />
@@ -39,7 +39,7 @@ export default function Hero() {
 
       {/* Foto direita — mesmo efeito, espelhado */}
       <div
-        className="hero-curtain-right absolute inset-y-0 right-0 w-[48%]"
+        className="hero-curtain-right absolute inset-y-0 right-0 w-[64%] md:w-[48%]"
         style={{
           maskImage:
             "linear-gradient(to left, black 0%, rgba(0,0,0,.92) 24%, rgba(0,0,0,.45) 62%, transparent 96%)",
@@ -53,7 +53,7 @@ export default function Hero() {
           fill
           priority
           quality={92}
-          sizes="(max-width: 768px) 100vw, 75vw"
+          sizes="(max-width: 768px) 130vw, 75vw"
           className="hero-photo-right object-cover object-top"
           {...previa("/images/hero/direita-equipe.avif")}
         />

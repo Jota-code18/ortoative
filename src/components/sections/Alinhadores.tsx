@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import CarrosselTratamentos, { type Tratamento } from "@/components/CarrosselTratamentos";
-import ComparativoTratamentos from "@/components/ComparativoTratamentos";
+import AlinhadoresCarrossel from "@/components/AlinhadoresCarrossel";
+import type { Tratamento } from "@/components/CarrosselTratamentos";
 import Reveal from "@/components/Reveal";
 import { previa } from "@/lib/lqip";
 
@@ -36,8 +36,9 @@ const tratamentos: Tratamento[] = [
 
 const pecas = [
   {
-    /* arco solto, com o fundo recortado: gira devagar como se a câmera desse
-       a volta nele */
+    /* Arco solto, com o fundo recortado. Fica estático a pedido do cliente:
+       girar um PNG só simula volume, e sem refração acompanhando a rotação o
+       efeito entrega que é uma imagem plana. */
     src: "/images/alinhadores/alinhador-arco.avif",
     alt: "Alinhador invisível Ortoative",
     largura: 466,
@@ -83,17 +84,9 @@ export default function Alinhadores() {
         </div>
       </div>
 
-      <Reveal delay={80}>
-        <div className="mt-4">
-          <CarrosselTratamentos tratamentos={tratamentos} pecas={pecas} />
-        </div>
-      </Reveal>
+      <AlinhadoresCarrossel tratamentos={tratamentos} pecas={pecas} />
 
-      <div className="mx-auto mt-5 max-w-5xl px-4 md:mt-8">
-        <Reveal>
-          <ComparativoTratamentos />
-        </Reveal>
-
+      <div className="mx-auto max-w-5xl px-4">
         <Reveal delay={100}>
           <p className="mt-5 text-center">
             <Link

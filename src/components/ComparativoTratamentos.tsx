@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { whatsappLink } from "@/lib/site";
@@ -154,10 +156,20 @@ function Painel({
   );
 }
 
-export default function ComparativoTratamentos() {
+/**
+ * @param ativo Índice do tratamento em foco no carrossel (0 alinhadores,
+ * 1 ortodontia fixa). Só afeta o celular: lá a tabela mostra uma coluna por
+ * vez, acompanhando o carrossel. No desktop as duas ficam lado a lado, que é
+ * onde a comparação direta cabe e funciona.
+ */
+export default function ComparativoTratamentos({ ativo = 0 }: { ativo?: number }) {
+  /* Duas colunas empilhadas no celular dobravam a altura da tabela e ainda
+     espremiam o texto em metade da largura. Mostrando só a do carrossel, a
+     seção encurta pela metade e cada resposta ganha a linha inteira. */
+  const soAlinhador = ativo % 2 === 0;
   return (
     <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-      <div className="px-4 pt-6 text-center md:px-8">
+      <div className="px-4 pt-4 text-center md:px-8 md:pt-6">
         <p className="mb-1 text-sm font-bold uppercase tracking-wide text-brand-green-text">
           Comparativo
         </p>
@@ -168,25 +180,31 @@ export default function ComparativoTratamentos() {
         </p>
       </div>
 
-      <div className="px-3 pb-2 pt-5 md:px-6">
+      <div className="px-3 pb-2 pt-3 md:px-6 md:pt-5">
         <table className="w-full text-left text-sm max-md:block md:text-base">
           <caption className="sr-only">
             Comparativo entre alinhadores Ortoative e ortodontia fixa, por critério.
           </caption>
 
           <thead className="max-md:block">
-            <tr className="max-md:grid max-md:grid-cols-2 max-md:gap-2">
+            <tr className="max-md:block">
               <th scope="col" className="w-[26%] p-2 align-bottom max-md:hidden">
                 <span className="sr-only">Critério</span>
               </th>
-              <th scope="col" className="p-2 align-bottom">
+              <th
+                scope="col"
+                className={`p-2 align-bottom ${soAlinhador ? "" : "max-md:hidden"}`}
+              >
                 <Painel
                   nome="Alinhadores Ortoative"
                   resumo="Discreto e removível"
                   tom="verde"
                 />
               </th>
-              <th scope="col" className="p-2 align-bottom">
+              <th
+                scope="col"
+                className={`p-2 align-bottom ${soAlinhador ? "max-md:hidden" : ""}`}
+              >
                 <Painel
                   nome="Ortodontia Fixa"
                   resumo="Constante e resolutiva"
@@ -200,14 +218,14 @@ export default function ComparativoTratamentos() {
             {linhas.map(({ criterio, icone, alinhador, fixo }) => (
               <tr
                 key={criterio}
-                className="border-t border-border/70 transition-colors hover:bg-realce max-md:mt-3 max-md:grid max-md:grid-cols-2 max-md:gap-x-2 max-md:rounded-2xl max-md:border max-md:border-border/70 max-md:p-3"
+                className="border-t border-border/70 transition-colors hover:bg-realce max-md:mt-1.5 max-md:block max-md:rounded-xl max-md:border max-md:border-border/70 max-md:px-3 max-md:py-2.5"
               >
                 {/* Nível 2: o critério. Cor de texto cheia e peso alto contra
                     as respostas, que ficam em cinza — é o que dá o "leia esta
                     linha, depois compare os dois lados". */}
                 <th
                   scope="row"
-                  className="p-3 text-left align-middle max-md:col-span-2 max-md:p-0 max-md:pb-2.5"
+                  className="p-3 text-left align-middle max-md:p-0 max-md:pb-1.5"
                 >
                   <span className="flex items-center gap-2.5">
                     <span className="text-brand-green-text">{icone}</span>
@@ -217,23 +235,19 @@ export default function ComparativoTratamentos() {
                   </span>
                 </th>
 
-                <td className="p-3 align-middle leading-snug text-muted-foreground max-md:p-0">
-                  <span
-                    aria-hidden="true"
-                    className="mb-1 block text-sm font-bold uppercase tracking-wide text-brand-green-text md:hidden"
-                  >
-                    Alinhadores
-                  </span>
+                <td
+                  className={`p-3 align-middle leading-snug text-muted-foreground max-md:p-0 ${
+                    soAlinhador ? "" : "max-md:hidden"
+                  }`}
+                >
                   {alinhador}
                 </td>
 
-                <td className="p-3 align-middle leading-snug text-muted-foreground max-md:p-0">
-                  <span
-                    aria-hidden="true"
-                    className="mb-1 block text-sm font-bold uppercase tracking-wide text-primary md:hidden"
-                  >
-                    Fixa
-                  </span>
+                <td
+                  className={`p-3 align-middle leading-snug text-muted-foreground max-md:p-0 ${
+                    soAlinhador ? "max-md:hidden" : ""
+                  }`}
+                >
                   {fixo}
                 </td>
               </tr>
