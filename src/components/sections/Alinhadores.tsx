@@ -12,23 +12,11 @@ const tratamentos: Tratamento[] = [
     titulo: "Alinhadores Ortoative",
     destaque: "+500",
     destaqueRotulo: "sorrisos transformados com alinhadores",
-    itens: [
-      "Praticamente invisíveis",
-      "Removíveis para comer e escovar",
-      "Fabricação própria em Anápolis",
-      "Planejamento digital 3D",
-    ],
   },
   {
     titulo: "Ortodontia Fixa",
     destaque: "+20.000",
     destaqueRotulo: "sorrisos transformados com aparelho fixo",
-    itens: [
-      "Indicada para casos complexos",
-      "Independe da disciplina de uso",
-      "Opções estéticas disponíveis",
-      "Mesma equipe há 26+ anos",
-    ],
   },
 ];
 

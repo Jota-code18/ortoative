@@ -9,7 +9,6 @@ export type Tratamento = {
   titulo: string;
   destaque: string;
   destaqueRotulo: string;
-  itens: string[];
 };
 
 type Peca = {
@@ -233,16 +232,6 @@ export default function CarrosselTratamentos({
                 <p className="text-base font-semibold text-muted-foreground md:text-lg">
                   {tratamento.destaqueRotulo}
                 </p>
-                <ul className="mt-6 grid gap-3 text-base text-muted-foreground sm:grid-cols-2 md:text-lg">
-                  {tratamento.itens.map((texto) => (
-                    <li key={texto} className="flex gap-2">
-                      <span aria-hidden="true" className="text-brand-green-text">
-                        ✓
-                      </span>
-                      <span>{texto}</span>
-                    </li>
-                  ))}
-                </ul>
               </article>
 
               {/* Caixa quadrada: o brilho fica igual nas duas peças. Antes ele
