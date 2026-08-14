@@ -69,7 +69,7 @@ export default function ComoFunciona() {
           >
             <span
               aria-hidden="true"
-              className={`font-mono text-xs ${
+              className={`font-mono text-sm ${
                 i === ativa ? "text-primary-foreground/70" : "text-muted-foreground/60"
               }`}
             >

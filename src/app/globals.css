@@ -164,21 +164,37 @@ body {
    Fotos revelam por cortina lateral, logo cresce e ganha foco, headline
    sobe linha a linha de dentro de uma máscara. */
 
+/* A revelação das fotos usa transform e opacity, não `clip-path`.
+ *
+ * A versão anterior animava `clip-path: inset()` em um elemento que já carrega
+ * `mask-image`. A combinação das duas é mal suportada — em Safari, sobretudo no
+ * iOS, o navegador às vezes simplesmente não aplica a animação. E como a regra
+ * usava `animation-fill-mode: both`, o quadro inicial (foto totalmente
+ * recortada) ficava congelado: as fotos nunca apareciam e sobrava o azul do
+ * fundo, que é a "cortina que não some".
+ *
+ * Agora o pior caso é seguro: se a animação não rodar, o elemento fica no
+ * estado natural, que é visível. E transform/opacity é a regra do projeto —
+ * animar `clip-path` sempre foi a exceção fora do padrão. */
 @keyframes hero-curtain-left {
   from {
-    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: translate3d(-8%, 0, 0);
   }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes hero-curtain-right {
   from {
-    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    transform: translate3d(8%, 0, 0);
   }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -238,10 +254,10 @@ body {
 }
 
 .hero-curtain-left {
-  animation: hero-curtain-left 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  animation: hero-curtain-left 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
 }
 .hero-curtain-right {
-  animation: hero-curtain-right 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  animation: hero-curtain-right 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards;
 }
 .hero-photo {
   animation: hero-photo-settle 2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
@@ -263,10 +279,10 @@ body {
   animation: hero-photo-settle-right 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
 .hero-logo {
-  animation: hero-logo-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  animation: hero-logo-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
 }
 .hero-stage {
-  animation: hero-stage-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  animation: hero-stage-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
 }
 .hero-line {
   display: block;
@@ -274,7 +290,7 @@ body {
 }
 .hero-line > span {
   display: block;
-  animation: hero-line-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: hero-line-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 .hero-titulo .hero-line:nth-child(1) > span {
   animation-delay: 0.95s;
