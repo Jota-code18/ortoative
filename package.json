@@ -19,7 +19,8 @@
     "commit:check": "commitlint --from=origin/main --to=HEAD --verbose",
     "test:mutacao": "stryker run",
     "verify": "npm run typecheck && npm run format:check && npm run lint && npm run knip && npm run arquitetura && npm run test:cobertura && npm run build",
-    "modelos:otimizar": "node scripts/modelos-otimizar.mjs --escrever"
+    "modelos:otimizar": "node scripts/modelos-otimizar.mjs --escrever",
+    "passeios:gravar": "node scripts/gravar-passeios.mjs"
   },
   "dependencies": {
     "@google/model-viewer": "^4.3.1",

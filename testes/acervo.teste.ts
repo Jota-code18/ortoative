@@ -10,7 +10,7 @@ const publico = (url: string) =>
 /** Todo caminho de arquivo que os dados prometem que existe. */
 const arquivos = [
   ...equipe.map((p) => p.foto),
-  ...unidades.flatMap((u) => [u.fachada, u.modelo3d, ...u.interiores.map((i) => i.src)]),
+  ...unidades.flatMap((u) => [u.fachada, ...u.interiores.map((i) => i.src)]),
   ...fabrica.map((f) => f.src),
   ...procedimentosGrade.map((p) => p.imagem),
 ];
