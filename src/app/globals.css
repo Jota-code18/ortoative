@@ -260,29 +260,60 @@ body {
   animation: hero-curtain-right 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards;
 }
 .hero-photo {
-  animation: hero-photo-settle 2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  animation: hero-photo-settle 2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
 }
 .hero-photo-mirrored {
   animation: hero-photo-settle-mirrored 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
-/* Foto da direita: sem espelhar (há logo no jaleco) e deslocada para fora do
-   véu azul, senão o rosto do Dr. Rui cai na parte mais escura */
+/* Foto da direita.
+ *
+ * No celular ela é a única foto e ocupa a tela toda: qualquer deslocamento
+ * lateral joga o casal para fora do centro. Lá ela só assenta a escala.
+ *
+ * No desktop divide espaço com o véu azul, e sem o deslocamento o rosto do
+ * Dr. Rui cai na parte mais escura do gradiente. O estado final mora na
+ * própria regra, não no fim do keyframe: assim `backwards` basta, e animação
+ * que não rode deixa a foto no lugar certo em vez de congelada no começo. */
+.hero-photo-right {
+  animation: hero-photo-settle 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards;
+}
+
 @keyframes hero-photo-settle-right {
   from {
     transform: scale(1.2) translateX(9%);
   }
-  to {
-    transform: scale(1.1) translateX(9%);
-  }
 }
-.hero-photo-right {
-  animation: hero-photo-settle-right 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+
+@media (min-width: 768px) {
+  .hero-photo-right {
+    transform: scale(1.1) translateX(9%);
+    animation: hero-photo-settle-right 2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards;
+  }
 }
 .hero-logo {
   animation: hero-logo-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
 }
 .hero-stage {
   animation: hero-stage-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+}
+/* O brilho que apresenta a logo segue a mesma posição dela em cada tamanho. */
+.hero-brilho {
+  background: radial-gradient(
+    ellipse 36% 15% at 50% 62%,
+    color-mix(in oklch, var(--hero-glow) 26%, transparent) 0%,
+    color-mix(in oklch, var(--primary) 24%, transparent) 46%,
+    transparent 78%
+  );
+}
+@media (min-width: 768px) {
+  .hero-brilho {
+    background: radial-gradient(
+      ellipse 32% 40% at 50% 44%,
+      color-mix(in oklch, var(--hero-glow) 26%, transparent) 0%,
+      color-mix(in oklch, var(--primary) 24%, transparent) 46%,
+      transparent 78%
+    );
+  }
 }
 .hero-line {
   display: block;
@@ -335,10 +366,12 @@ p.hero-line > span {
    fotos. Uma elipse estreita e centrada na logo deixa os rostos visíveis nas
    laterais — antes ela abria demais e as pessoas sumiam atrás do azul. */
 .hero-veu {
+  /* No celular a elipse acompanha a logo (58%) e fica estreita: ela existe
+     para dar contraste à logo, não para cobrir os rostos lá em cima. */
   background: radial-gradient(
-    ellipse 34% 26% at 50% 36%,
-    color-mix(in oklch, var(--brand-blue) 72%, transparent) 0%,
-    color-mix(in oklch, var(--brand-blue) 44%, transparent) 38%,
+    ellipse 38% 18% at 50% 62%,
+    color-mix(in oklch, var(--brand-blue) 62%, transparent) 0%,
+    color-mix(in oklch, var(--brand-blue) 34%, transparent) 38%,
     color-mix(in oklch, var(--brand-blue) 14%, transparent) 66%,
     transparent 84%
   );

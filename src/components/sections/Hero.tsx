@@ -3,19 +3,29 @@ import ModelViewer from "@/components/ModelViewer";
 import { previa } from "@/lib/lqip";
 
 /**
- * Hero visual: fotos nas laterais dissolvendo em um azul difuso ao centro,
- * onde a logo 3D é apresentada. Sem bordas retas — as máscaras das fotos e o
- * véu azul se sobrepõem, então não há divisão vertical perceptível.
+ * Hero — dois desenhos, um componente.
+ *
+ * No desktop as duas fotos se dissolvem em um azul difuso ao centro, com a
+ * logo 3D no meio. No celular esse arranjo não funciona: duas fotos de 64% se
+ * sobrepõem, os rostos caem na dobra e a logo compete com eles. Lá a foto é
+ * uma só, os rostos ficam no terço de cima (livres da Header), a logo desce
+ * para abaixo do tronco e as frases fecham embaixo.
+ *
+ * São duas composições, mas UM componente e UM `ModelViewer`: montar dois
+ * baixaria o runtime do model-viewer e o GLB duas vezes, e o visitante paga
+ * pelo que não vê. O que muda entre os tamanhos é posição, não estrutura.
  */
 export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative h-[92vh] min-h-[560px] overflow-hidden bg-hero-dark"
+      className="relative h-[100svh] min-h-[560px] overflow-hidden bg-hero-dark md:h-[92vh]"
     >
-      {/* Foto esquerda — dissolve gradualmente em direção ao centro */}
+      {/* Foto esquerda — só no desktop.
+          `sizes` de 1px no celular faz o navegador escolher o menor recorte do
+          srcset: o elemento fica oculto, e o download some junto. */}
       <div
-        className="hero-curtain-left absolute inset-y-0 left-0 w-[64%] md:w-[48%]"
+        className="hero-curtain-left absolute inset-y-0 left-0 hidden w-[48%] md:block"
         style={{
           maskImage:
             "linear-gradient(to right, black 0%, rgba(0,0,0,.92) 24%, rgba(0,0,0,.45) 62%, transparent 96%)",
@@ -27,21 +37,18 @@ export default function Hero() {
           src="/images/hero/esquerda-hero.avif"
           alt="Paciente sorrindo"
           fill
-          priority
           quality={92}
-          /* O recorte é mais alto que largo: a altura é que manda no tamanho
-             necessário, por isso `sizes` bem acima da largura do bloco. */
-          sizes="(max-width: 768px) 130vw, 75vw"
-          /* No celular as duas fotos ficam mais largas e os rostos caíam
-             na dobra do meio. Cada uma puxa o recorte para o seu lado. */
-          className="hero-photo object-cover object-[22%_center] md:object-center"
+          sizes="(max-width: 768px) 1px, 75vw"
+          className="hero-photo object-cover object-center"
           {...previa("/images/hero/esquerda-hero.avif")}
         />
       </div>
 
-      {/* Foto direita — mesmo efeito, espelhado */}
+      {/* Foto direita — a única no celular, onde ocupa a tela inteira.
+          `object-[center_18%]` deixa os rostos no terço de cima, abaixo da
+          Header e acima da logo. */}
       <div
-        className="hero-curtain-right absolute inset-y-0 right-0 w-[64%] md:w-[48%]"
+        className="hero-curtain-right absolute inset-y-0 right-0 w-full md:w-[48%]"
         style={{
           maskImage:
             "linear-gradient(to left, black 0%, rgba(0,0,0,.92) 24%, rgba(0,0,0,.45) 62%, transparent 96%)",
@@ -55,36 +62,30 @@ export default function Hero() {
           fill
           priority
           quality={92}
-          sizes="(max-width: 768px) 130vw, 75vw"
-          className="hero-photo-right object-cover object-[78%_top] md:object-top"
+          sizes="(max-width: 768px) 100vw, 75vw"
+          className="hero-photo-right object-cover object-[center_18%] md:object-[78%_top]"
           {...previa("/images/hero/direita-equipe.avif")}
         />
       </div>
 
-      {/* Véu azul difuso por cima das fotos — some para as laterais.
-          O gradiente vive no globals.css porque muda de tamanho no mobile. */}
+      {/* Véu azul: no celular acompanha a logo, que desceu */}
       <div className="hero-veu pointer-events-none absolute inset-0" />
 
       {/* Brilho que apresenta a logo */}
-      <div
-        className="hero-stage pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 32% 40% at 50% 44%, color-mix(in oklch, var(--hero-glow) 26%, transparent) 0%, color-mix(in oklch, var(--primary) 24%, transparent) 46%, transparent 78%)",
-        }}
-      />
+      <div className="hero-stage hero-brilho pointer-events-none absolute inset-0" />
 
-      {/* Escurecimento inferior para receber o texto */}
+      {/* Escurecimento inferior para receber o texto. Mais alto no celular,
+          onde há logo e duas frases empilhadas sobre a foto. */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[52%]"
         style={{
           background:
-            "linear-gradient(to top, color-mix(in oklch, var(--hero-dark) 92%, transparent) 0%, color-mix(in oklch, var(--hero-dark) 55%, transparent) 42%, transparent 100%)",
+            "linear-gradient(to top, color-mix(in oklch, var(--hero-dark) 92%, transparent) 0%, color-mix(in oklch, var(--hero-dark) 55%, transparent) 46%, transparent 100%)",
         }}
       />
 
-      {/* Logo 3D central */}
-      <div className="hero-logo absolute left-1/2 top-[42%] h-[400px] w-[400px] max-w-[84vw] -translate-x-1/2 -translate-y-1/2">
+      {/* Logo 3D. No celular fica abaixo do tronco; no desktop, no centro. */}
+      <div className="hero-logo absolute left-1/2 top-[62%] h-[190px] w-[190px] max-w-[68vw] -translate-x-1/2 -translate-y-1/2 md:top-[42%] md:h-[400px] md:w-[400px] md:max-w-[84vw]">
         <ModelViewer
           src="/models/ortoative-logo.glb"
           alt="Logo Ortoative em 3D"
@@ -97,8 +98,8 @@ export default function Hero() {
         />
       </div>
 
-      {/* Texto: benefício como título, posicionamento como apoio */}
-      <div className="absolute bottom-[9%] left-1/2 w-[92%] max-w-2xl -translate-x-1/2 text-center">
+      {/* Texto: no celular logo abaixo da logo; no desktop, no rodapé da hero */}
+      <div className="absolute bottom-[7%] left-1/2 w-[92%] max-w-2xl -translate-x-1/2 text-center md:bottom-[9%]">
         <h1 className="hero-titulo text-3xl font-bold leading-tight text-white md:text-[2.75rem]">
           <span className="hero-line">
             <span>Seu sorriso alinhado</span>
