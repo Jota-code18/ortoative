@@ -25,7 +25,9 @@ test.describe("legibilidade", () => {
   for (const rota of ROTAS) {
     test(`nenhum texto abaixo de ${MINIMO_PX}px em ${rota}`, async ({ page }) => {
       await page.goto(rota);
-      await page.waitForLoadState("networkidle");
+      /* `networkidle` não dispara com vídeo em laço; e o tamanho da fonte já
+         está resolvido assim que o CSS aplica. */
+      await page.waitForLoadState("domcontentloaded");
 
       const pequenos = await page.evaluate((minimo) => {
         const achados: { px: number; texto: string; classe: string }[] = [];

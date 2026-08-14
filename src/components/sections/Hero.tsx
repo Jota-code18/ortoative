@@ -32,7 +32,9 @@ export default function Hero() {
           /* O recorte é mais alto que largo: a altura é que manda no tamanho
              necessário, por isso `sizes` bem acima da largura do bloco. */
           sizes="(max-width: 768px) 130vw, 75vw"
-          className="hero-photo object-cover object-center"
+          /* No celular as duas fotos ficam mais largas e os rostos caíam
+             na dobra do meio. Cada uma puxa o recorte para o seu lado. */
+          className="hero-photo object-cover object-[22%_center] md:object-center"
           {...previa("/images/hero/esquerda-hero.avif")}
         />
       </div>
@@ -54,7 +56,7 @@ export default function Hero() {
           priority
           quality={92}
           sizes="(max-width: 768px) 130vw, 75vw"
-          className="hero-photo-right object-cover object-top"
+          className="hero-photo-right object-cover object-[78%_top] md:object-top"
           {...previa("/images/hero/direita-equipe.avif")}
         />
       </div>
