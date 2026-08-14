@@ -100,11 +100,11 @@ function Resposta({ marca }: { marca: Marca }) {
 export default function ComparativoTratamentos() {
   return (
     <div>
-      {/* Sem cartão nem borda em volta: a tabela é continuação do bloco de
-          cima, não um objeto separado boiando embaixo dele. */}
-      <h3 className="text-center text-2xl md:text-3xl">
+      {/* Sem cartão nem borda em volta: o comparativo fecha as duas seções de
+          tratamento, não é um objeto separado boiando embaixo delas. */}
+      <h2 className="text-center text-2xl md:text-3xl">
         Entenda qual o melhor para você
-      </h3>
+      </h2>
 
       <table className="mt-4 w-full border-collapse text-left md:mt-5">
         <caption className="sr-only">

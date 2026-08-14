@@ -1,71 +1,106 @@
+import Image from "next/image";
 import Link from "next/link";
-import AlinhadoresCarrossel from "@/components/AlinhadoresCarrossel";
-import type { Tratamento } from "@/components/CarrosselTratamentos";
+import NumeroAnimado from "@/components/NumeroAnimado";
 import Reveal from "@/components/Reveal";
+import { previa } from "@/lib/lqip";
+import { whatsappLink } from "@/lib/site";
 
 /**
- * Mockup: alinhadores e ortodontia fixa — faixa infinita alternando os dois
- * cards com as peças flutuando entre eles, e o comparativo logo abaixo.
+ * Alinhadores — seção própria.
+ *
+ * Antes os dois tratamentos dividiam um bloco só, alternando num carrossel sob
+ * o título "Alinhadores ou Ortodontia Fixa?". A pergunta era boa para o
+ * comparativo, mas péssima para apresentar: o visitante que já quer alinhador
+ * tinha de esperar o card certo aparecer, e o que queria fixo via primeiro o
+ * outro. Cada tratamento agora se apresenta sozinho, e a comparação vem depois
+ * — quando já se sabe o que está sendo comparado.
  */
-const tratamentos: Tratamento[] = [
-  {
-    titulo: "Alinhadores Ortoative",
-    destaque: "+500",
-    destaqueRotulo: "sorrisos transformados com alinhadores",
-  },
-  {
-    titulo: "Ortodontia Fixa",
-    destaque: "+20.000",
-    destaqueRotulo: "sorrisos transformados com aparelho fixo",
-  },
-];
-
-const pecas = [
-  {
-    /* Arco solto, com o fundo recortado. Fica estático a pedido do cliente:
-       girar um PNG só simula volume, e sem refração acompanhando a rotação o
-       efeito entrega que é uma imagem plana. */
-    src: "/images/alinhadores/alinhador-arco.avif",
-    alt: "Alinhador invisível Ortoative",
-    largura: 466,
-    altura: 267,
-    girar: true,
-  },
-  {
-    src: "/images/alinhadores/aparelho-movel.avif",
-    alt: "Aparelho ortodôntico móvel",
-    largura: 900,
-    altura: 1228,
-  },
+const PONTOS = [
+  "Praticamente invisível no dia a dia",
+  "Você tira para comer e escovar",
+  "Planejamento digital em 3D antes de começar",
+  "Fabricado na nossa própria fábrica, em Anápolis",
 ];
 
 export default function Alinhadores() {
   return (
-    <section className="py-5 md:py-10">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="alinhadores" className="scroll-mt-20 py-5 md:py-10">
+      <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 md:grid-cols-2 md:gap-12">
         <Reveal>
-          <h2 className="text-3xl md:text-4xl">
-            Alinhadores <span className="text-brand-green-text">ou</span> Ortodontia Fixa?
-          </h2>
-          <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
-            Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual combina
-            com seu caso, sua rotina e seu bolso.
+          <p className="text-sm font-bold uppercase tracking-wide text-brand-green-text">
+            Alinhadores Ortoative
           </p>
-        </Reveal>
-      </div>
+          <h2 className="mt-1 text-3xl md:text-4xl">
+            O sorriso alinhado sem ninguém perceber
+          </h2>
+          <p className="mt-3 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Placas transparentes trocadas em casa, planejadas dente por dente e produzidas
+            aqui mesmo — sem enviar o seu caso para fora.
+          </p>
 
-      <AlinhadoresCarrossel tratamentos={tratamentos} pecas={pecas} />
+          <ul className="mt-5 space-y-2">
+            {PONTOS.map((p) => (
+              <li key={p} className="flex items-start gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="mt-0.5 shrink-0 font-bold text-brand-green-text"
+                >
+                  ✓
+                </span>
+                <span className="text-base text-muted-foreground">{p}</span>
+              </li>
+            ))}
+          </ul>
 
-      <div className="mx-auto max-w-5xl px-4">
-        <Reveal delay={100}>
-          <p className="mt-5 text-center">
+          <p className="mt-6">
+            <span className="block text-4xl font-extrabold text-brand-green-text md:text-5xl">
+              <NumeroAnimado valor="+500" />
+            </span>
+            <span className="mt-1 block text-base text-muted-foreground">
+              sorrisos transformados com alinhadores
+            </span>
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/alinhadores"
-              className="inline-block py-1 font-bold text-primary underline-offset-4 hover:underline"
+              className="tatil rounded-full bg-brand-green-btn px-6 py-3 font-bold text-white transition-colors hover:bg-brand-green-text"
             >
-              Ver tudo sobre os alinhadores Ortoative →
+              Ver tudo sobre os alinhadores
             </Link>
-          </p>
+            <a
+              href={whatsappLink("Oi! Quero saber mais sobre os alinhadores Ortoative.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tatil inline-block px-2 py-3 font-bold text-brand-green-text underline-offset-4 hover:underline"
+            >
+              Falar no WhatsApp
+            </a>
+          </div>
+        </Reveal>
+
+        <Reveal from="right" delay={120}>
+          {/* O brilho atrás da peça é o mesmo tratamento que ela tinha no
+              carrossel — é o que dá volume a um recorte plano. */}
+          <div className="relative aspect-square">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-full"
+              style={{
+                background:
+                  "radial-gradient(circle, color-mix(in oklch, var(--brand-green) 22%, transparent) 0%, color-mix(in oklch, var(--primary) 12%, transparent) 45%, transparent 72%)",
+              }}
+            />
+            <Image
+              src="/images/alinhadores/alinhador-arco.avif"
+              alt="Alinhador invisível Ortoative"
+              width={466}
+              height={267}
+              sizes="(max-width: 768px) 90vw, 45vw"
+              className="absolute inset-0 m-auto max-h-[86%] w-auto max-w-full object-contain"
+              {...previa("/images/alinhadores/alinhador-arco.avif")}
+            />
+          </div>
         </Reveal>
       </div>
     </section>

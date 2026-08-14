@@ -22,7 +22,7 @@ test.describe("comparativo de tratamentos", () => {
 
     const medida = await page.evaluate(() => {
       const tabela = document.querySelector("table") as HTMLElement;
-      const titulo = [...document.querySelectorAll("h3")].find((h) =>
+      const titulo = [...document.querySelectorAll("h2")].find((h) =>
         h.textContent?.includes("Entenda qual")
       ) as HTMLElement;
       return {

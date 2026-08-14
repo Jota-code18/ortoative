@@ -17,6 +17,29 @@ test.describe("triagem", () => {
    * animação de entrada), e sob carga o clique seguinte pegava o elemento
    * antigo, já descartado.
    */
+  /**
+   * Escolhe a queixa inicial e confirma que o quiz reagiu.
+   *
+   * O clique logo depois do `goto` pode chegar antes da hidratação: o botão já
+   * está na tela, o Playwright o considera clicável, e o React ainda não
+   * escuta. Localmente passa; sob carga paralela o clique se perde e todos os
+   * testes seguintes falham por um motivo que não é o deles.
+   */
+  async function escolherQueixa(page: import("@playwright/test").Page, queixa: string) {
+    const enunciado = page.locator("#avaliacao h2");
+    await expect(enunciado).toHaveText("O que mais te incomoda hoje?");
+
+    await expect
+      .poll(
+        async () => {
+          await page.getByRole("button", { name: queixa }).click();
+          return enunciado.innerText();
+        },
+        { timeout: 15_000, message: "o quiz não saiu da primeira pergunta" }
+      )
+      .not.toBe("O que mais te incomoda hoje?");
+  }
+
   async function ateOContato(page: import("@playwright/test").Page) {
     const nome = page.getByPlaceholder("Seu nome");
     /* O contador "N/M" é o sinal confiável de que o passo avançou: o enunciado
@@ -38,7 +61,7 @@ test.describe("triagem", () => {
 
   test("percorre uma trilha até o passo de contato", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Dentes tortos ou desalinhados" }).click();
+    await escolherQueixa(page, "Dentes tortos ou desalinhados");
 
     // avança escolhendo sempre a primeira opção até chegar no formulário
     await ateOContato(page);
@@ -49,11 +72,11 @@ test.describe("triagem", () => {
 
   test("a queixa escolhida muda as perguntas seguintes", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Dentes tortos ou desalinhados" }).click();
+    await escolherQueixa(page, "Dentes tortos ou desalinhados");
     const orto = await page.locator("#avaliacao h2").innerText();
 
     await page.reload();
-    await page.getByRole("button", { name: "Dor de dente" }).click();
+    await escolherQueixa(page, "Dor de dente");
     const dor = await page.locator("#avaliacao h2").innerText();
 
     expect(orto, "trilhas diferentes deveriam abrir perguntas diferentes").not.toBe(dor);
@@ -61,7 +84,7 @@ test.describe("triagem", () => {
 
   test("o botão de concluir só libera com telefone válido", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Dor de dente" }).click();
+    await escolherQueixa(page, "Dor de dente");
     await ateOContato(page);
 
     const enviar = page.getByRole("button", { name: /Concluir|Enviando/ });
@@ -77,7 +100,7 @@ test.describe("triagem", () => {
 
   test("o telefone ganha máscara enquanto é digitado", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Dor de dente" }).click();
+    await escolherQueixa(page, "Dor de dente");
     await ateOContato(page);
 
     const campo = page.getByPlaceholder("Telefone com DDD");
@@ -93,7 +116,7 @@ test.describe("triagem", () => {
     );
 
     await page.goto("/");
-    await page.getByRole("button", { name: "Dentes tortos ou desalinhados" }).click();
+    await escolherQueixa(page, "Dentes tortos ou desalinhados");
     await ateOContato(page);
 
     await page.getByPlaceholder("Seu nome").fill("Maria Teste");
@@ -112,7 +135,7 @@ test.describe("triagem", () => {
 
   test("dá para voltar e corrigir a resposta anterior", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Dentes tortos ou desalinhados" }).click();
+    await escolherQueixa(page, "Dentes tortos ou desalinhados");
     const segunda = await page.locator("#avaliacao h2").innerText();
 
     await page.getByRole("button", { name: "← Voltar" }).click();

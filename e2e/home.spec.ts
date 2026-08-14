@@ -47,7 +47,15 @@ test.describe("home", () => {
         await new Promise((r) => setTimeout(r, 40));
       }
     });
-    await page.waitForLoadState("networkidle");
+    /* Nada de `networkidle`: com dois vídeos em laço na página ele nunca
+       dispara, e o teste morria por tempo em vez de por defeito. A espera é
+       pelo que interessa — as imagens terem decodificado. */
+    await expect
+      .poll(
+        () => page.evaluate(() => [...document.images].filter((i) => !i.complete).length),
+        { timeout: 30_000, message: "imagens continuaram carregando" }
+      )
+      .toBe(0);
 
     const problemas = await page.evaluate(() =>
       [...document.images]
