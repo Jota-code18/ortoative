@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito, Nunito_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import DadosEstruturados from "@/components/DadosEstruturados";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -7,18 +7,38 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import { site } from "@/lib/site";
 import "./globals.css";
 
+/*
+ * As fontes são servidas do próprio domínio, não do Google.
+ *
+ * Com `next/font/google` o build busca os arquivos na rede toda vez que roda.
+ * Quando fonts.googleapis.com falha — e falhou três vezes aqui, uma delas
+ * derrubando o job de ponta a ponta no CI —, o build inteiro cai por um motivo
+ * que não tem nada a ver com o código.
+ *
+ * Hospedar resolve isso e ainda tira uma requisição a terceiro do carregamento
+ * da página, o que ajuda no tempo até o texto aparecer e evita mandar o IP do
+ * paciente para o Google sem necessidade.
+ *
+ * Os arquivos são as fontes variáveis do subconjunto latino (39 KB e 31 KB).
+ * Para atualizar, baixe de novo em fonts.google.com/specimen/Nunito.
+ */
+
 /** Títulos e UI — fonte oficial do manual da marca */
-const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"], // 600 = Semibold dos subtítulos (manual)
+const nunito = localFont({
+  src: "./fontes/nunito.woff2",
+  /* Variável de 400 a 900: um arquivo cobre os pesos 600, 700 e 800 que o
+     manual pede, sem baixar três. */
+  weight: "400 900",
+  style: "normal",
   display: "swap",
   variable: "--font-nunito",
 });
 
 /** Corpo de texto — mesma família, terminações retas: melhor leitura em massa */
-const nunitoSans = Nunito_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
+const nunitoSans = localFont({
+  src: "./fontes/nunito-sans.woff2",
+  weight: "400 900",
+  style: "normal",
   display: "swap",
   variable: "--font-nunito-sans",
 });

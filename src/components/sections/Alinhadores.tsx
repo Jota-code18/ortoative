@@ -1,9 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import AlinhadoresCarrossel from "@/components/AlinhadoresCarrossel";
 import type { Tratamento } from "@/components/CarrosselTratamentos";
 import Reveal from "@/components/Reveal";
-import { previa } from "@/lib/lqip";
 
 /**
  * Mockup: alinhadores e ortodontia fixa — faixa infinita alternando os dois
@@ -57,31 +55,15 @@ export default function Alinhadores() {
   return (
     <section className="py-5 md:py-10">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="grid items-center gap-6 md:grid-cols-[1fr_auto] md:gap-10">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl">
-              Alinhadores <span className="text-brand-green-text">ou</span> Ortodontia
-              Fixa?
-            </h2>
-            <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
-              Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual combina
-              com seu caso, sua rotina e seu bolso.
-            </p>
-          </Reveal>
-
-          {/* o estojo já vem com os cantos arredondados no próprio arquivo */}
-          <Reveal from="right" delay={120}>
-            <Image
-              src="/images/alinhadores/estojo-aberto.avif"
-              alt="Estojo aberto com o par de alinhadores Ortoative"
-              width={387}
-              height={373}
-              sizes="(max-width: 768px) 45vw, 224px"
-              className="h-auto w-40 md:w-56"
-              {...previa("/images/alinhadores/estojo-aberto.avif")}
-            />
-          </Reveal>
-        </div>
+        <Reveal>
+          <h2 className="text-3xl md:text-4xl">
+            Alinhadores <span className="text-brand-green-text">ou</span> Ortodontia Fixa?
+          </h2>
+          <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
+            Os dois transformam sorrisos — e aqui fazemos os dois. Entenda qual combina
+            com seu caso, sua rotina e seu bolso.
+          </p>
+        </Reveal>
       </div>
 
       <AlinhadoresCarrossel tratamentos={tratamentos} pecas={pecas} />
