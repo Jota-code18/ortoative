@@ -46,16 +46,10 @@ export default function Hero() {
 
       {/* Foto direita — a única no celular, onde ocupa a tela inteira.
           `object-[center_18%]` deixa os rostos no terço de cima, abaixo da
-          Header e acima da logo. */}
-      <div
-        className="hero-curtain-right absolute inset-y-0 right-0 w-full md:w-[48%]"
-        style={{
-          maskImage:
-            "linear-gradient(to left, black 0%, rgba(0,0,0,.92) 24%, rgba(0,0,0,.45) 62%, transparent 96%)",
-          WebkitMaskImage:
-            "linear-gradient(to left, black 0%, rgba(0,0,0,.92) 24%, rgba(0,0,0,.45) 62%, transparent 96%)",
-        }}
-      >
+          Header e acima da logo. A máscara lateral só existe no desktop: no
+          celular não há foto do outro lado para dissolver contra, e ela apenas
+          apagava a faixa esquerda, deixando o azul do fundo aparecer. */}
+      <div className="hero-curtain-right hero-mascara-direita absolute inset-y-0 right-0 w-full md:w-[48%]">
         <Image
           src="/images/hero/direita-equipe.avif"
           alt="Equipe Ortoative"
@@ -85,7 +79,7 @@ export default function Hero() {
       />
 
       {/* Logo 3D. No celular fica abaixo do tronco; no desktop, no centro. */}
-      <div className="hero-logo absolute left-1/2 top-[62%] h-[190px] w-[190px] max-w-[68vw] -translate-x-1/2 -translate-y-1/2 md:top-[42%] md:h-[400px] md:w-[400px] md:max-w-[84vw]">
+      <div className="hero-logo absolute left-1/2 top-[59%] h-[240px] w-[240px] max-w-[80vw] -translate-x-1/2 -translate-y-1/2 md:top-[42%] md:h-[400px] md:w-[400px] md:max-w-[84vw]">
         <ModelViewer
           src="/models/ortoative-logo.glb"
           alt="Logo Ortoative em 3D"
