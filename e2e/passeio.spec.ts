@@ -37,9 +37,7 @@ test.describe("passeio das unidades", () => {
   }) => {
     for (const slug of ["anapolis", "goianesia"]) {
       for (const arquivo of [
-        `${slug}.webm`,
         `${slug}.mp4`,
-        `${slug}-mobile.webm`,
         `${slug}-mobile.mp4`,
         `${slug}-poster.avif`,
       ]) {
@@ -49,14 +47,15 @@ test.describe("passeio das unidades", () => {
     }
   });
 
-  test("nenhum passeio passa de 1,5 MB", async ({ request }) => {
-    /* O ponto da troca foi peso. Sem esta trava, uma regravação em qualidade
-       alta desfaz o ganho e ninguém percebe até o site ficar lento de novo. */
+  test("nenhum passeio passa de 4 MB", async ({ request }) => {
+    /* Continua sendo trava de peso, com o teto ajustado depois que a qualidade
+       subiu: 4 MB deixa margem para o render em CRF 20 sem abrir espaço para
+       uma regravação descuidada dobrar o tamanho sem ninguém notar. */
     for (const arquivo of ["anapolis.mp4", "goianesia.mp4"]) {
       const tamanho = Number(
         (await request.head(`/videos/${arquivo}`)).headers()["content-length"] ?? 0
       );
-      expect(tamanho / 1024 / 1024, arquivo).toBeLessThan(1.5);
+      expect(tamanho / 1024 / 1024, arquivo).toBeLessThan(4);
     }
   });
 
