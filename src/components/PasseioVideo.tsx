@@ -30,8 +30,9 @@ function useConsultaDeMidia(consulta: string): boolean | null {
  * MB de textura em memória de vídeo e o three.js no bundle. Decodificação de
  * vídeo é acelerada por hardware em qualquer aparelho dos últimos dez anos.
  *
- * Os arquivos saem de `npm run passeios:gravar`, que grava o canvas da cena
- * original. Os `.glb` continuam no repositório como fonte para regravar.
+ * Os arquivos saem de `npm run passeios:renderizar`, que desenha a cena quadro
+ * a quadro. Só MP4: o VP9 saía 3,5x maior nesta cena, e vindo primeiro no
+ * `<source>` era ele que os navegadores baixavam.
  */
 export default function PasseioVideo({
   slug,
@@ -95,7 +96,6 @@ export default function PasseioVideo({
               pronto ? "opacity-100" : "opacity-0"
             }`}
           >
-            <source src={`/videos/${slug}${variante}.webm`} type="video/webm" />
             <source src={`/videos/${slug}${variante}.mp4`} type="video/mp4" />
           </video>
         )}

@@ -71,7 +71,7 @@
       }
     },
     {
-      "includes": ["src/components/DadosEstruturados.tsx"],
+      "includes": ["src/components/DadosEstruturados.tsx", "src/app/gravacao/page.tsx"],
       "linter": {
         "rules": {
           "security": { "noDangerouslySetInnerHtml": "off" }
@@ -96,7 +96,10 @@
       }
     },
     {
-      "includes": ["src/components/CenaClinica3D.tsx", "src/components/QuizInline.tsx"],
+      "includes": [
+        "src/components/CenaClinicaGravacao.tsx",
+        "src/components/QuizInline.tsx"
+      ],
       "linter": {
         "rules": {
           "complexity": { "noExcessiveCognitiveComplexity": "off" }

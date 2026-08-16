@@ -6,8 +6,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // rota de recebimento de lead não deve ser rastreada
-      disallow: ["/api/"],
+      /* /gravacao é o bastidor do render dos passeios, não conteúdo do site;
+         /api/ recebe lead e não deve ser rastreada. */
+      disallow: ["/gravacao", "/api/"],
     },
     sitemap: `${site.url}/sitemap.xml`,
   };
