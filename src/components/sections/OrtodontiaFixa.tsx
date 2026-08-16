@@ -15,21 +15,22 @@ export default function OrtodontiaFixa() {
       nome="Ortodontia Fixa"
       numero="+20.000"
       numeroRotulo="sorrisos transformados com aparelho fixo"
-      frase="Colado aos dentes, trabalha sozinho o tempo todo — sem depender de você lembrar."
+      frase="O tratamento que não depende de disciplina."
+      descricao="Colado aos dentes, trabalha o tempo todo. É a escolha mais previsível para mordidas complexas, e a mesma equipe acompanha do primeiro ajuste à contenção."
       ctaPrincipal={{
         href: "/procedimentos/ortodontia-fixa",
-        texto: "Ver tudo sobre ortodontia fixa",
+        texto: "Ver ortodontia fixa",
       }}
       mensagemWhatsapp="Oi! Quero saber mais sobre ortodontia fixa."
       tom="azul"
       textoNaDireita
       imagem={
-        <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+        <div className="relative aspect-square overflow-hidden rounded-2xl md:aspect-[4/3] md:rounded-3xl">
           <Image
             src="/images/procedimentos/ortodontia-fixa.avif"
             alt="Aparelho ortodôntico fixo instalado"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 36vw, 50vw"
             className="object-cover"
             {...previa("/images/procedimentos/ortodontia-fixa.avif")}
           />

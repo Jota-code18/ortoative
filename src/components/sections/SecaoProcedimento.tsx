@@ -5,18 +5,23 @@ import Reveal from "@/components/Reveal";
 import { whatsappLink } from "@/lib/site";
 
 /**
- * Molde das quatro seções de procedimento da home.
+ * Molde das seções de procedimento da home.
  *
- * Existe para garantir que a hierarquia seja a mesma nas quatro — antes cada
- * uma tinha a sua, com o nome ora em antetítulo pequeno ora em manchete, e a
- * frase de apoio ora cinza ora preta. Com um molde só, mudar a hierarquia é
- * mudar um arquivo, e nenhuma seção fica para trás.
+ * Existe para a hierarquia ser a mesma em todas — antes cada uma tinha a sua,
+ * com o nome ora em antetítulo pequeno ora em manchete. Com um molde só, mudar
+ * a hierarquia é mudar um arquivo e nenhuma seção fica para trás.
  *
- * A ordem de leitura é sempre a mesma:
- *   1. nome do procedimento — o maior
+ * Ordem de leitura, sempre igual:
+ *   1. nome do procedimento — o maior, na cor do tom
  *   2. número de sorrisos, quando existe
- *   3. frase de apoio, preta e um degrau menor que o nome
- *   4. chamadas
+ *   3. frase de destaque, preta e um degrau menor que o nome
+ *   4. descrição, que explica o que a frase só promete
+ *   5. chamadas
+ *
+ * No celular a imagem fica AO LADO do texto, não acima. Empilhada, a seção
+ * passava de uma tela e a imagem caía fora do campo de visão — o paciente
+ * rolava sem nunca ver as duas coisas juntas. Ao lado e menor, tudo cabe numa
+ * tela só.
  */
 export default function SecaoProcedimento({
   id,
@@ -24,6 +29,7 @@ export default function SecaoProcedimento({
   numero,
   numeroRotulo,
   frase,
+  descricao,
   ctaPrincipal,
   mensagemWhatsapp,
   imagem,
@@ -31,12 +37,15 @@ export default function SecaoProcedimento({
   textoNaDireita = false,
 }: {
   id: string;
-  /** nome do procedimento — primeiro nível */
+  /** nome do procedimento — primeiro nível, na cor do tom */
   nome: string;
   /** só alinhadores e ortodontia fixa têm contagem */
   numero?: string;
   numeroRotulo?: string;
+  /** frase de destaque logo abaixo do nome */
   frase: string;
+  /** explica o tratamento — a frase sozinha vende, mas não informa */
+  descricao: string;
   ctaPrincipal: { href: string; texto: string };
   mensagemWhatsapp: string;
   imagem: ReactNode;
@@ -48,42 +57,46 @@ export default function SecaoProcedimento({
   const corDoTom = verde ? "text-brand-green-text" : "text-primary";
 
   return (
-    <section id={id} className="scroll-mt-20 py-5 md:py-10">
-      <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 md:grid-cols-2 md:gap-12">
-        {/* No celular a imagem vem sempre antes do texto; a alternância de
-            lados só existe onde há duas colunas. */}
+    <section id={id} className="scroll-mt-20 py-4 md:py-10">
+      {/* A imagem ocupa 40% no celular e metade no desktop: é o que sobra de
+          largura depois do texto sem apertar demais a leitura. */}
+      <div className="mx-auto grid max-w-6xl grid-cols-[1fr_40%] items-center gap-4 px-4 md:grid-cols-2 md:gap-12">
         <Reveal
           from={textoNaDireita ? "left" : "right"}
           delay={120}
-          className={textoNaDireita ? "md:order-1" : "md:order-2"}
+          className={textoNaDireita ? "order-1" : "order-2"}
         >
           {imagem}
         </Reveal>
 
-        <Reveal className={textoNaDireita ? "md:order-2" : "md:order-1"}>
-          <h2 className="text-4xl leading-tight md:text-5xl">{nome}</h2>
+        <Reveal className={textoNaDireita ? "order-2" : "order-1"}>
+          <h2 className={`text-2xl leading-tight md:text-5xl ${corDoTom}`}>{nome}</h2>
 
           {numero && (
-            <p className="mt-3">
-              <span className={`block text-3xl font-extrabold md:text-4xl ${corDoTom}`}>
+            <p className="mt-1.5 md:mt-3">
+              <span className={`block text-xl font-extrabold md:text-4xl ${corDoTom}`}>
                 <NumeroAnimado valor={numero} />
               </span>
-              <span className="mt-0.5 block text-base text-muted-foreground">
+              <span className="mt-0.5 block text-sm text-muted-foreground md:text-base">
                 {numeroRotulo}
               </span>
             </p>
           )}
 
-          {/* Preta e um degrau abaixo do nome: é a frase que explica, e
-              precisa de peso — cinza a rebaixaria a legenda. */}
-          <p className="mt-4 max-w-xl text-2xl font-semibold leading-snug text-foreground md:text-3xl">
+          {/* Preta e um degrau abaixo do nome: é a frase que vende, e precisa
+              de peso — cinza a rebaixaria a legenda. */}
+          <p className="mt-2 max-w-xl text-lg font-semibold leading-snug text-foreground md:mt-4 md:text-3xl">
             {frase}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground md:mt-3 md:text-lg">
+            {descricao}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 md:mt-6 md:gap-3">
             <Link
               href={ctaPrincipal.href}
-              className={`tatil rounded-full px-6 py-3 font-bold text-white transition-colors ${
+              className={`tatil rounded-full px-4 py-2.5 text-sm font-bold text-white transition-colors md:px-6 md:py-3 md:text-base ${
                 verde
                   ? "bg-brand-green-btn hover:bg-brand-green-text"
                   : "bg-primary hover:bg-brand-blue"
@@ -95,7 +108,7 @@ export default function SecaoProcedimento({
               href={whatsappLink(mensagemWhatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className={`tatil inline-block px-2 py-3 font-bold underline-offset-4 hover:underline ${corDoTom}`}
+              className={`tatil inline-block px-2 py-2.5 text-sm font-bold underline-offset-4 hover:underline md:py-3 md:text-base ${corDoTom}`}
             >
               Falar no WhatsApp
             </a>
