@@ -32,7 +32,9 @@ test.describe("triagem", () => {
     await expect
       .poll(
         async () => {
-          await page.getByRole("button", { name: queixa }).click();
+          /* Escopo no #avaliacao: a home tem um segundo quiz, e um seletor
+             solto pode alcançar o outro. */
+          await page.locator("#avaliacao").getByRole("button", { name: queixa }).click();
           return enunciado.innerText();
         },
         { timeout: 15_000, message: "o quiz não saiu da primeira pergunta" }

@@ -18,10 +18,10 @@ import { whatsappLink } from "@/lib/site";
  *   4. descrição, que explica o que a frase só promete
  *   5. chamadas
  *
- * No celular a imagem fica AO LADO do texto, não acima. Empilhada, a seção
- * passava de uma tela e a imagem caía fora do campo de visão — o paciente
- * rolava sem nunca ver as duas coisas juntas. Ao lado e menor, tudo cabe numa
- * tela só.
+ * No celular o arranjo é em L: a imagem fica ao lado do bloco de cima — nome
+ * mais número, ou nome mais frase em quem não tem contagem — e o restante corre
+ * na largura inteira embaixo. Assim a imagem entra no mesmo campo de visão do
+ * nome, e a descrição não fica espremida numa coluna de 60%.
  */
 export default function SecaoProcedimento({
   id,
@@ -56,23 +56,22 @@ export default function SecaoProcedimento({
   const verde = tom === "verde";
   const corDoTom = verde ? "text-brand-green-text" : "text-primary";
 
+  const blocoFrase = (
+    /* Preta e um degrau abaixo do nome: é a frase que vende, e precisa de
+       peso — cinza a rebaixaria a legenda. */
+    <p className="max-w-xl text-lg font-semibold leading-snug text-foreground md:text-3xl">
+      {frase}
+    </p>
+  );
+
   return (
     <section id={id} className="scroll-mt-20 py-4 md:py-10">
-      {/* A imagem ocupa 40% no celular e metade no desktop: é o que sobra de
-          largura depois do texto sem apertar demais a leitura. */}
-      <div className="mx-auto grid max-w-6xl grid-cols-[1fr_40%] items-center gap-4 px-4 md:grid-cols-2 md:gap-12">
-        <Reveal
-          from={textoNaDireita ? "left" : "right"}
-          delay={120}
-          className={textoNaDireita ? "order-1" : "order-2"}
-        >
-          {imagem}
-        </Reveal>
-
-        <Reveal className={textoNaDireita ? "order-2" : "order-1"}>
+      <div className="mx-auto grid max-w-6xl grid-cols-[1fr_38%] items-start gap-x-4 gap-y-3 px-4 md:grid-cols-2 md:items-center md:gap-x-12">
+        {/* Bloco de cima: o que fica ao lado da imagem no celular. */}
+        <Reveal className={textoNaDireita ? "md:order-2" : "md:order-1"}>
           <h2 className={`text-2xl leading-tight md:text-5xl ${corDoTom}`}>{nome}</h2>
 
-          {numero && (
+          {numero ? (
             <p className="mt-1.5 md:mt-3">
               <span className={`block text-xl font-extrabold md:text-4xl ${corDoTom}`}>
                 <NumeroAnimado valor={numero} />
@@ -81,40 +80,84 @@ export default function SecaoProcedimento({
                 {numeroRotulo}
               </span>
             </p>
+          ) : (
+            /* Sem contagem, é a frase que sobe para o lado da imagem — o bloco
+               de cima nunca fica só com o nome. */
+            <div className="mt-2 md:mt-4">{blocoFrase}</div>
           )}
 
-          {/* Preta e um degrau abaixo do nome: é a frase que vende, e precisa
-              de peso — cinza a rebaixaria a legenda. */}
-          <p className="mt-2 max-w-xl text-lg font-semibold leading-snug text-foreground md:mt-4 md:text-3xl">
-            {frase}
-          </p>
-
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground md:mt-3 md:text-lg">
-            {descricao}
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 md:mt-6 md:gap-3">
-            <Link
-              href={ctaPrincipal.href}
-              className={`tatil rounded-full px-4 py-2.5 text-sm font-bold text-white transition-colors md:px-6 md:py-3 md:text-base ${
-                verde
-                  ? "bg-brand-green-btn hover:bg-brand-green-text"
-                  : "bg-primary hover:bg-brand-blue"
-              }`}
-            >
-              {ctaPrincipal.texto}
-            </Link>
-            <a
-              href={whatsappLink(mensagemWhatsapp)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`tatil inline-block px-2 py-2.5 text-sm font-bold underline-offset-4 hover:underline md:py-3 md:text-base ${corDoTom}`}
-            >
-              Falar no WhatsApp
-            </a>
+          {/* No desktop tudo mora nesta coluna; no celular o resto desce. */}
+          <div className="hidden md:block">
+            {numero && <div className="mt-4">{blocoFrase}</div>}
+            <p className="mt-3 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              {descricao}
+            </p>
+            <Chamadas
+              ctaPrincipal={ctaPrincipal}
+              mensagemWhatsapp={mensagemWhatsapp}
+              verde={verde}
+              corDoTom={corDoTom}
+            />
           </div>
         </Reveal>
+
+        <Reveal
+          from={textoNaDireita ? "left" : "right"}
+          delay={120}
+          className={textoNaDireita ? "md:order-1" : "md:order-2"}
+        >
+          {imagem}
+        </Reveal>
+
+        {/* No celular: largura inteira, abaixo do bloco de cima e da imagem. */}
+        <div className="col-span-2 md:hidden">
+          {numero && blocoFrase}
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {descricao}
+          </p>
+          <Chamadas
+            ctaPrincipal={ctaPrincipal}
+            mensagemWhatsapp={mensagemWhatsapp}
+            verde={verde}
+            corDoTom={corDoTom}
+          />
+        </div>
       </div>
     </section>
+  );
+}
+
+function Chamadas({
+  ctaPrincipal,
+  mensagemWhatsapp,
+  verde,
+  corDoTom,
+}: {
+  ctaPrincipal: { href: string; texto: string };
+  mensagemWhatsapp: string;
+  verde: boolean;
+  corDoTom: string;
+}) {
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 md:mt-6">
+      <Link
+        href={ctaPrincipal.href}
+        className={`tatil rounded-full px-5 py-2.5 text-sm font-bold text-white transition-colors md:px-6 md:py-3 md:text-base ${
+          verde
+            ? "bg-brand-green-btn hover:bg-brand-green-text"
+            : "bg-primary hover:bg-brand-blue"
+        }`}
+      >
+        {ctaPrincipal.texto}
+      </Link>
+      <a
+        href={whatsappLink(mensagemWhatsapp)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`tatil inline-block py-2.5 text-sm font-bold underline-offset-4 hover:underline md:py-3 md:text-base ${corDoTom}`}
+      >
+        Falar no WhatsApp
+      </a>
+    </div>
   );
 }

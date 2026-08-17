@@ -1,5 +1,5 @@
-import ComparativoTratamentos from "@/components/ComparativoTratamentos";
 import Costura from "@/components/Costura";
+import QuizTratamento from "@/components/QuizTratamento";
 import Alinhadores from "@/components/sections/Alinhadores";
 import EquipeLocal from "@/components/sections/EquipeLocal";
 import Estetica from "@/components/sections/Estetica";
@@ -26,10 +26,10 @@ export default function Home() {
       <Alinhadores />
       <OrtodontiaFixa />
 
-      {/* O comparativo fecha as duas seções: comparar só faz sentido depois de
-          o visitante saber o que está sendo comparado. */}
+      {/* O quiz fecha as duas seções: responder qual serve para você só faz
+          sentido depois de o visitante saber o que está sendo comparado. */}
       <div className="mx-auto max-w-3xl px-4 py-5 md:py-10">
-        <ComparativoTratamentos />
+        <QuizTratamento />
       </div>
       <ProvaSocial />
       <Implantes />

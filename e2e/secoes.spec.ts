@@ -46,13 +46,35 @@ test.describe("seções de procedimento", () => {
     for (const id of SECOES) {
       const separadas = await page.evaluate((sel) => {
         const s = document.getElementById(sel) as HTMLElement;
-        const img = (s.querySelector("img") as HTMLElement).getBoundingClientRect();
-        const titulo = (s.querySelector("h2") as HTMLElement).getBoundingClientRect();
+
+        /* Posição de layout, não a da tela: a entrada desloca a imagem 22px de
+           lado, e medir no meio da animação daria falso negativo. `offsetLeft`
+           ignora transform e já entrega onde o elemento pousa — assim o teste
+           não precisa esperar animação nenhuma. */
+        const esquerda = (el: HTMLElement) => {
+          let x = 0;
+          for (
+            let n: HTMLElement | null = el;
+            n;
+            n = n.offsetParent as HTMLElement | null
+          ) {
+            x += n.offsetLeft;
+          }
+          return x;
+        };
+        const faixa = (el: HTMLElement) => {
+          const e = esquerda(el);
+          return { inicio: e, fim: e + el.offsetWidth };
+        };
+
+        const img = faixa(s.querySelector("img") as HTMLElement);
+        const titulo = faixa(s.querySelector("h2") as HTMLElement);
+
         /* Lado a lado quer dizer que não se cruzam na horizontal: uma coluna
            termina antes de a outra começar. Comparar a sobreposição vertical
-           não serve — a imagem é centralizada contra o bloco de texto inteiro,
-           então pode não alcançar a altura do título. */
-        return img.right <= titulo.left + 1 || titulo.right <= img.left + 1;
+           não serve — a imagem acompanha só o bloco de cima, então pode não
+           alcançar a altura do título. */
+        return img.fim <= titulo.inicio + 1 || titulo.fim <= img.inicio + 1;
       }, id);
 
       expect(separadas, `imagem de ${id} não está ao lado do texto`).toBe(true);
