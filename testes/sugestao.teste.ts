@@ -1,70 +1,66 @@
 import { describe, expect, it } from "vitest";
 import {
   calcularSugestao,
+  detalhesDaSugestao,
   mensagemSugestao,
-  montarPerguntas,
   type Opcao,
-  type Pergunta,
+  PERGUNTAS,
   PROCEDIMENTOS,
-  perguntaInicial,
   type Resposta,
-  type TrilhaSugestao,
 } from "@/lib/sugestao";
 
-const TRILHAS: TrilhaSugestao[] = ["alinhamento", "reposicao", "estetica"];
-
-/** Percorre um caminho escolhendo a opção pelo rótulo. */
+/** Percorre o quiz escolhendo a opção pelo rótulo. */
 function responder(rotulos: string[]): Resposta[] {
-  let trilha: TrilhaSugestao | null = null;
-  const respostas: Resposta[] = [];
-
-  for (const rotulo of rotulos) {
-    /* Anotados de propósito: sem isso o TS vê um ciclo — `trilha` sai de
-       `opcao`, que sai de `pergunta`, que sai de `trilha`. */
-    const pergunta: Pergunta = montarPerguntas(trilha)[respostas.length];
-    const opcao: Opcao | undefined = pergunta.opcoes.find((o) => o.label === rotulo);
+  return rotulos.map((rotulo, i) => {
+    const pergunta = PERGUNTAS[i];
+    const opcao = pergunta.opcoes.find((o) => o.label === rotulo);
     if (!opcao) throw new Error(`opção "${rotulo}" não existe em ${pergunta.id}`);
-    if (opcao.trilha) trilha = opcao.trilha;
-    respostas.push({ perguntaId: pergunta.id, opcao });
-  }
-
-  return respostas;
+    return { perguntaId: pergunta.id, opcao };
+  });
 }
 
-describe("montarPerguntas", () => {
-  it("mostra só a queixa antes de a trilha existir", () => {
-    expect(montarPerguntas(null)).toEqual([perguntaInicial]);
-  });
+/** A primeira opção de cada pergunta, do começo ao fim. */
+function caminhoPadrao(): Resposta[] {
+  return PERGUNTAS.map((p) => ({ perguntaId: p.id, opcao: p.opcoes[0] }));
+}
 
-  it("nenhum caminho passa de 8 perguntas", () => {
+describe("PERGUNTAS", () => {
+  it("não passa de 8 perguntas", () => {
     /* Oito é o limite acordado: acima disso o visitante abandona no meio e o
        quiz deixa de entregar sugestão nenhuma. */
-    for (const trilha of TRILHAS) {
-      expect(montarPerguntas(trilha).length).toBeLessThanOrEqual(8);
-    }
+    expect(PERGUNTAS.length).toBeLessThanOrEqual(8);
   });
 
-  it("começa sempre pela queixa", () => {
-    for (const trilha of TRILHAS) {
-      expect(montarPerguntas(trilha)[0]).toBe(perguntaInicial);
-    }
+  it("tem ids únicos", () => {
+    const ids = PERGUNTAS.map((p) => p.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it("toda opção tem peso para algum procedimento", () => {
+  it("toda opção pesa para algum tratamento", () => {
     // opção sem peso é resposta que não influencia nada — sintoma de esquecimento
-    const todas: Opcao[] = TRILHAS.flatMap((t) =>
-      montarPerguntas(t).flatMap((p) => p.opcoes)
-    );
+    const todas: Opcao[] = PERGUNTAS.flatMap((p) => p.opcoes);
     for (const opcao of todas) {
       expect(Object.keys(opcao.peso).length).toBeGreaterThan(0);
     }
   });
 
-  it("cada trilha tem ids de pergunta únicos", () => {
-    for (const trilha of TRILHAS) {
-      const ids = montarPerguntas(trilha).map((p) => p.id);
-      expect(new Set(ids).size).toBe(ids.length);
+  it("só compara alinhador e ortodontia fixa", () => {
+    /* O quiz do topo faz a triagem geral; este responde a dúvida entre os dois.
+       Um peso para implante ou lente aqui significa que a comparação vazou. */
+    const permitidos = new Set(Object.keys(PROCEDIMENTOS));
+    for (const opcao of PERGUNTAS.flatMap((p) => p.opcoes)) {
+      for (const id of Object.keys(opcao.peso)) expect(permitidos.has(id)).toBe(true);
     }
+  });
+
+  it("nenhum tratamento vence todas as perguntas", () => {
+    /* Mais de 20.000 sorrisos da casa vieram do aparelho fixo. Quiz em que um
+       lado ganha sempre ensina o paciente a desconfiar dele. */
+    const soma = (id: "alinhadores" | "ortodontia-fixa") =>
+      PERGUNTAS.filter((p) => p.opcoes.some((o) => (o.peso[id] ?? 0) > 0)).length;
+
+    expect(soma("alinhadores")).toBeGreaterThan(1);
+    expect(soma("ortodontia-fixa")).toBeGreaterThan(1);
   });
 });
 
@@ -72,7 +68,7 @@ describe("calcularSugestao", () => {
   it("sugere alinhadores para quem quer discrição e tem disciplina", () => {
     const s = calcularSugestao(
       responder([
-        "Meus dentes são tortos",
+        "Tenho espaços entre eles",
         "Faz muita diferença",
         "Falo com gente o tempo todo",
         "Topo, sou organizado",
@@ -84,6 +80,7 @@ describe("calcularSugestao", () => {
 
     expect(s.principal).toBe("alinhadores");
     expect(s.alternativa).toBe("ortodontia-fixa");
+    expect(s.equilibrado).toBe(false);
   });
 
   it("sugere ortodontia fixa para mordida e falta de disciplina", () => {
@@ -100,47 +97,25 @@ describe("calcularSugestao", () => {
     );
 
     expect(s.principal).toBe("ortodontia-fixa");
-  });
-
-  it("sugere implantes para quem perdeu dente", () => {
-    const s = calcularSugestao(
-      responder([
-        "Perdi um ou mais dentes",
-        "Faz mais de um ano",
-        "Estão alinhados",
-        "Não uso prótese nenhuma",
-      ])
-    );
-
-    expect(s.principal).toBe("implantes");
-    expect(s.alternativa).toBeUndefined();
-  });
-
-  it("dentes tortos junto com dente faltando levantam o alinhamento como alternativa", () => {
-    const s = calcularSugestao(
-      responder([
-        "Perdi um ou mais dentes",
-        "Faz menos de um ano",
-        "Não, também estão tortos",
-        "Uso ponte ou dentadura",
-      ])
-    );
-
-    expect(s.principal).toBe("implantes");
     expect(s.alternativa).toBe("alinhadores");
   });
 
-  it("sugere lentes para queixa de cor com base alinhada", () => {
+  it("avisa quando a diferença é pequena demais para decidir", () => {
     const s = calcularSugestao(
       responder([
-        "Não gosto da cor ou do formato",
-        "A cor deles",
-        "Estão alinhados",
-        "Quero ver antes de decidir",
+        "Meus dentes são tortos",
+        "Faz um pouco",
+        "Rotina tranquila, sem essa preocupação",
+        "Acho que sim, mas esqueceria às vezes",
+        "Sem problema, moro perto",
+        "Sou adulto",
+        "Resolver com o máximo de previsibilidade",
       ])
     );
 
-    expect(s.principal).toBe("estetica");
+    /* Sem uma resposta forte de nenhum lado, dizer "é este" seria inventar
+       convicção — a tela precisa saber disso para mudar o texto. */
+    expect(s.equilibrado).toBe(true);
   });
 
   it("reúne os motivos das respostas, no máximo três", () => {
@@ -160,41 +135,53 @@ describe("calcularSugestao", () => {
     expect(new Set(s.motivos).size).toBe(3);
   });
 
-  it("cai em alinhadores quando não há resposta nenhuma", () => {
-    // a tela do resultado nunca deve aparecer vazia, mesmo com estado inválido
-    expect(calcularSugestao([]).principal).toBe("alinhadores");
+  it("sempre devolve os dois tratamentos, nunca o mesmo duas vezes", () => {
+    const s = calcularSugestao(caminhoPadrao());
+    expect(s.principal).not.toBe(s.alternativa);
+  });
+
+  it("não deixa a tela vazia se não houver resposta nenhuma", () => {
+    const s = calcularSugestao([]);
+    expect(s.principal).toBe("alinhadores");
+    expect(s.equilibrado).toBe(true);
   });
 
   it("não depende da ordem em que as respostas foram somadas", () => {
-    const caminho = responder([
-      "Meus dentes são tortos",
-      "Faz um pouco",
-      "Rotina tranquila, sem essa preocupação",
-      "Acho que sim, mas esqueceria às vezes",
-      "Sem problema, moro perto",
-      "Sou adulto",
-      "Resolver com o máximo de previsibilidade",
-    ]);
-
+    const caminho = caminhoPadrao();
     expect(calcularSugestao([...caminho].reverse()).principal).toBe(
       calcularSugestao(caminho).principal
     );
   });
 });
 
-describe("mensagemSugestao", () => {
-  it("leva o nome do procedimento e todas as respostas", () => {
-    const respostas = responder([
-      "Perdi um ou mais dentes",
-      "Faz menos de um ano",
-      "Estão alinhados",
-      "Não uso prótese nenhuma",
-    ]);
-    const texto = mensagemSugestao(respostas, calcularSugestao(respostas));
+describe("detalhesDaSugestao", () => {
+  it("devolve o enunciado de cada pergunta com a resposta escolhida", () => {
+    /* É esta lista que chega no e-mail da secretária: se vier com id em vez de
+       enunciado, ela recebe "disciplina: Topo, sou organizado". */
+    const detalhes = detalhesDaSugestao(caminhoPadrao());
 
-    /* A secretária recebe só esta mensagem: se faltar resposta, ela precisa
-       repetir o quiz inteiro no atendimento. */
-    expect(texto).toContain(PROCEDIMENTOS.implantes.nome);
+    expect(detalhes).toHaveLength(PERGUNTAS.length);
+    for (const [i, d] of detalhes.entries()) {
+      expect(d.pergunta).toBe(PERGUNTAS[i].titulo);
+      expect(d.resposta).toBe(PERGUNTAS[i].opcoes[0].label);
+    }
+  });
+});
+
+describe("mensagemSugestao", () => {
+  it("leva nome, sugestão e todas as respostas", () => {
+    const respostas = caminhoPadrao();
+    const texto = mensagemSugestao("Ana", respostas, calcularSugestao(respostas));
+
+    expect(texto).toContain("Ana");
+    expect(texto).toContain(PROCEDIMENTOS.alinhadores.nome);
     for (const { opcao } of respostas) expect(texto).toContain(opcao.label);
+  });
+
+  it("não quebra quando o nome não foi informado", () => {
+    const respostas = caminhoPadrao();
+    expect(mensagemSugestao("", respostas, calcularSugestao(respostas))).toContain(
+      "(não informado)"
+    );
   });
 });
