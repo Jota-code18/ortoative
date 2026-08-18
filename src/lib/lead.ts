@@ -27,11 +27,6 @@ export async function enviarLead(dados: {
   telefone: string;
   trilha: TrilhaId | null;
   respostas: Record<string, string>;
-  /** de onde veio o lead — aparece no e-mail da recepção */
-  origem?: string;
-  /** resumo pronto, para origens que não têm trilha */
-  detalhes?: { pergunta: string; resposta: string }[];
-  especialidade?: string;
 }): Promise<boolean> {
   try {
     const r = await fetch("/api/lead", {

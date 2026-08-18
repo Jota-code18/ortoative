@@ -20,15 +20,6 @@ type Payload = {
   telefone?: string;
   trilha?: TrilhaId | null;
   respostas?: Record<string, string>;
-  /**
-   * Quem manda o lead. A triagem do topo tem trilhas e urgência; o quiz de
-   * comparação, não — ele já chega com o resumo pronto nos campos abaixo.
-   */
-  origem?: string;
-  /** pares pergunta/resposta prontos, quando a origem não usa `trilha` */
-  detalhes?: { pergunta?: string; resposta?: string }[];
-  /** encaminhamento sugerido pela própria origem */
-  especialidade?: string;
 };
 
 /**
@@ -66,19 +57,9 @@ export async function POST(request: Request) {
     );
   }
 
-  /* Detalhes prontos ganham do cálculo por trilha: o quiz de comparação não
-     tem trilha, e `respostasDetalhadas` devolveria uma lista vazia — a
-     secretária receberia nome e telefone sem nada do que a pessoa respondeu. */
-  const prontos = (payload.detalhes ?? [])
-    .map((d) => ({
-      pergunta: (d.pergunta ?? "").trim(),
-      resposta: (d.resposta ?? "").trim(),
-    }))
-    .filter((d) => d.pergunta && d.resposta);
-
   const urgente = ehUrgencia(trilha, respostas);
-  const detalhes = prontos.length ? prontos : respostasDetalhadas(trilha, respostas);
-  const especialidade = payload.especialidade?.trim() || especialidadeSugerida(trilha);
+  const detalhes = respostasDetalhadas(trilha, respostas);
+  const especialidade = especialidadeSugerida(trilha);
   const assunto = `${urgente ? "[URGÊNCIA] " : ""}Novo lead do site: ${nome} — ${especialidade}`;
 
   const html = `
@@ -88,9 +69,7 @@ export async function POST(request: Request) {
       <p style="margin:0 0 16px">
         <strong>Nome:</strong> ${escapar(nome)}<br>
         <strong>Telefone:</strong> ${escapar(telefone)}<br>
-        <strong>Encaminhamento sugerido:</strong> ${escapar(especialidade)}${
-          payload.origem ? `<br><strong>Origem:</strong> ${escapar(payload.origem)}` : ""
-        }
+        <strong>Encaminhamento sugerido:</strong> ${escapar(especialidade)}
       </p>
       <table cellpadding="8" style="border-collapse:collapse;width:100%;max-width:640px">
         ${detalhes
