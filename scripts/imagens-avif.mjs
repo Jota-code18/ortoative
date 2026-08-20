@@ -6,10 +6,8 @@
  *  2. `src/lib/lqip.json` — um base64 minúsculo por imagem, usado como
  *     `blurDataURL` do next/image para o espaço nunca ficar vazio
  *
- * O que NÃO converte: `public/images/marca/`. Essas entram no JSON-LD, no
- * favicon, no cartão de compartilhamento e no poster do model-viewer — tudo
- * consumido fora do next/image, por rastreador e por elemento nativo, que não
- * negociam formato. PNG ali é compatibilidade, não desleixo.
+ * O que NÃO converte está em `PRESERVAR`, logo abaixo, com o motivo de cada
+ * pasta.
  */
 
 import { readdir, readFile, stat, unlink, writeFile } from "node:fs/promises";
@@ -21,10 +19,26 @@ const RAIZ = path.resolve(import.meta.dirname, "..");
 const ACERVO = path.join(RAIZ, "public", "images");
 const MANIFESTO = path.join(RAIZ, "src", "lib", "lqip.json");
 
-/** Pastas que ficam no formato original, com o motivo. */
-const PRESERVAR = new Set(["marca"]);
+/**
+ * Pastas que ficam no formato original, com o motivo.
+ *
+ * `marca` entra no JSON-LD, no favicon e no poster do model-viewer. `og` é o
+ * cartão de compartilhamento: WhatsApp, Facebook e LinkedIn não decodificam
+ * AVIF, e o link apareceria sem imagem nenhuma. Nos dois casos quem consome é
+ * rastreador ou elemento nativo, que não negocia formato — PNG e JPG ali são
+ * compatibilidade, não desleixo.
+ */
+const PRESERVAR = new Set(["marca", "og"]);
 
 const CONVERSIVEIS = new Set([".jpg", ".jpeg", ".png", ".webp"]);
+
+/**
+ * O manifesto é reescrito inteiro a cada execução, então precisa listar também
+ * o que já está em AVIF. Sem isso, converter uma foto nova apagava o LQIP de
+ * todas as outras — o acervo já convertido não voltava a ser percorrido, e o
+ * site perdia a prévia de 20 imagens de uma vez.
+ */
+const CATALOGAVEIS = new Set([...CONVERSIVEIS, ".avif"]);
 
 /**
  * Qualidade alta de propósito. O arquivo em `public/` é a fonte: o next/image
@@ -42,7 +56,7 @@ async function* percorrer(dir) {
     if (item.isDirectory()) {
       if (PRESERVAR.has(item.name)) continue;
       yield* percorrer(completo);
-    } else if (CONVERSIVEIS.has(path.extname(item.name).toLowerCase())) {
+    } else if (CATALOGAVEIS.has(path.extname(item.name).toLowerCase())) {
       yield completo;
     }
   }
@@ -62,28 +76,35 @@ async function main() {
   const convertidos = [];
 
   for await (const origem of percorrer(ACERVO)) {
-    const destino = origem.replace(/\.(jpe?g|png|webp)$/i, ".avif");
     const entrada = await readFile(origem);
-    const imagem = sharp(entrada);
-    const meta = await imagem.metadata();
+    const jaEhAvif = path.extname(origem).toLowerCase() === ".avif";
+    const destino = jaEhAvif ? origem : origem.replace(/\.(jpe?g|png|webp)$/i, ".avif");
 
-    // `alphaQuality` alto preserva a borda recortada do alinhador; sem isso o
-    // canal alfa vira degrau visível contra o brilho de fundo.
-    await sharp(entrada)
-      .avif({
-        quality: QUALIDADE,
-        effort: 6,
-        chromaSubsampling: "4:4:4",
-        ...(meta.hasAlpha ? { alphaQuality: 90 } : {}),
-      })
-      .toFile(destino);
+    if (!jaEhAvif) {
+      const meta = await sharp(entrada).metadata();
 
-    const miniatura = await sharp(entrada)
+      // `alphaQuality` alto preserva a borda recortada do alinhador; sem isso o
+      // canal alfa vira degrau visível contra o brilho de fundo.
+      await sharp(entrada)
+        .avif({
+          quality: QUALIDADE,
+          effort: 6,
+          chromaSubsampling: "4:4:4",
+          ...(meta.hasAlpha ? { alphaQuality: 90 } : {}),
+        })
+        .toFile(destino);
+    }
+
+    /* O LQIP sai do arquivo que ficou publicado, não do original: assim quem
+       já estava em AVIF continua no manifesto sem ser reconvertido. */
+    const miniatura = await sharp(await readFile(destino))
       .resize(LARGURA_LQIP, null, { fit: "inside" })
       .webp({ quality: 40 })
       .toBuffer();
 
     lqip[paraUrl(destino)] = `data:image/webp;base64,${miniatura.toString("base64")}`;
+
+    if (jaEhAvif) continue;
 
     const tamanhoAntes = entrada.byteLength;
     const tamanhoDepois = (await stat(destino)).size;
@@ -103,8 +124,10 @@ async function main() {
   await writeFile(MANIFESTO, `${JSON.stringify(lqip, null, 2)}\n`, "utf8");
 
   console.log(
-    `\n${convertidos.length} imagens · ${kb(antes)} KB → ${kb(depois)} KB ` +
-      `(-${(100 * (1 - depois / antes)).toFixed(0)}%)`
+    convertidos.length
+      ? `\n${convertidos.length} imagens · ${kb(antes)} KB → ${kb(depois)} KB ` +
+          `(-${(100 * (1 - depois / antes)).toFixed(0)}%)`
+      : "\nNada a converter — o acervo já está em AVIF."
   );
   console.log(`LQIP de ${Object.keys(lqip).length} imagens em src/lib/lqip.json`);
   if (!limpar) console.log("\nOriginais mantidos. Rode com --limpar para removê-los.");

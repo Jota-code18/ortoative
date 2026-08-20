@@ -16,24 +16,17 @@ export default function Alinhadores() {
       mensagemWhatsapp="Oi! Quero saber mais sobre os alinhadores Ortoative."
       tom="verde"
       imagem={
-        /* O brilho atrás da peça é o que dá volume a um recorte plano. */
-        <div className="relative aspect-[4/3] md:aspect-square">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, color-mix(in oklch, var(--brand-green) 22%, transparent) 0%, color-mix(in oklch, var(--primary) 12%, transparent) 45%, transparent 72%)",
-            }}
-          />
+        <div className="relative aspect-square overflow-hidden rounded-2xl md:aspect-[4/3] md:rounded-3xl">
           <Image
-            src="/images/alinhadores/alinhador-arco.avif"
-            alt="Alinhador invisível Ortoative"
-            width={466}
-            height={267}
-            sizes="(max-width: 768px) 36vw, 45vw"
-            className="absolute inset-0 m-auto max-h-full w-auto max-w-full object-contain"
-            {...previa("/images/alinhadores/alinhador-arco.avif")}
+            src="/images/alinhadores/alinhador-na-mao.avif"
+            alt="Alinhador invisível segurado na mão, diante de um sorriso"
+            fill
+            sizes="(max-width: 768px) 36vw, 50vw"
+            /* A foto é 16:9 e o alinhador fica à direita do centro. Nos dois
+               formatos do quadro (1:1 no celular, 4:3 no desktop) sobra só
+               largura, e centralizar cortaria a mão que segura a peça. */
+            className="object-cover object-[58%_50%]"
+            {...previa("/images/alinhadores/alinhador-na-mao.avif")}
           />
         </div>
       }
